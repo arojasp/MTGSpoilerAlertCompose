@@ -1,6 +1,7 @@
 package es.alejandro.mtgspoileralert.sets
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -24,7 +25,8 @@ import es.alejandro.mtgspoileralert.sets.viewmodel.SetsViewModel
 
 @Composable
 fun SetsScreen(
-    viewModel: SetsViewModel = hiltViewModel()
+    viewModel: SetsViewModel = hiltViewModel(),
+    onItemClick: (String) -> Unit
 ) {
 
     val listOfSets by remember { viewModel.listOfSets }
@@ -34,7 +36,9 @@ fun SetsScreen(
         Spacer(modifier = Modifier.height(30.dp))
         LazyColumn {
             items(listOfSets) { item ->
-                SingleSetItem(set = item)
+                SingleSetItem(set = item) {
+                    onItemClick(it)
+                }
             }
         }
     }
@@ -43,9 +47,13 @@ fun SetsScreen(
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun SingleSetItem(
-    set: Set
+    set: Set,
+    onClick: (String) -> Unit
 ) {
-    Card(modifier = Modifier.padding(8.dp).fillMaxWidth(), elevation = 8.dp) {
+    Card(modifier = Modifier
+        .padding(8.dp)
+        .fillMaxWidth()
+        .clickable { onClick(set.code) }, elevation = 8.dp) {
         Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             Image(
                 modifier = Modifier.size(80.dp), painter = rememberImagePainter(

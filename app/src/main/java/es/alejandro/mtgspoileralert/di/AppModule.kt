@@ -6,6 +6,11 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.scopes.ActivityScoped
 import dagger.hilt.components.SingletonComponent
+import es.alejandro.mtgspoileralert.cards.repository.CardsRepository
+import es.alejandro.mtgspoileralert.cards.repository.ICardsRepository
+import es.alejandro.mtgspoileralert.cards.service.ICardsService
+import es.alejandro.mtgspoileralert.cards.usecase.GetCardsUseCase
+import es.alejandro.mtgspoileralert.cards.usecase.IGetCardsUseCase
 import es.alejandro.mtgspoileralert.sets.repository.ISetsRepository
 import es.alejandro.mtgspoileralert.sets.repository.SetsRepository
 import es.alejandro.mtgspoileralert.sets.service.ISetsService
@@ -35,6 +40,12 @@ class AppModule {
         return retrofit.create(ISetsService::class.java)
     }
 
+    @Provides
+    @Singleton
+    fun providesCardsService(retrofit: Retrofit): ICardsService {
+        return retrofit.create(ICardsService::class.java)
+    }
+
     @Module
     @InstallIn(SingletonComponent::class)
     interface AppModuleInt {
@@ -45,7 +56,15 @@ class AppModule {
 
         @Binds
         @Singleton
+        fun provideCardsRepository(repo: CardsRepository): ICardsRepository
+
+        @Binds
+        @Singleton
         fun providesSetsUseCase(uc: GetSetsUseCase): IGetSetUseCase
+
+        @Binds
+        @Singleton
+        fun providesCardsUseCase(uc: GetCardsUseCase): IGetCardsUseCase
 
     }
 

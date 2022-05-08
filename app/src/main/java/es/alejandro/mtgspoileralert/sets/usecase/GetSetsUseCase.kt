@@ -5,9 +5,7 @@ import es.alejandro.mtgspoileralert.sets.repository.ISetsRepository
 import javax.inject.Inject
 
 interface IGetSetUseCase {
-
     suspend operator fun invoke(): SetsResponse
-
 }
 
 class GetSetsUseCase @Inject constructor(
