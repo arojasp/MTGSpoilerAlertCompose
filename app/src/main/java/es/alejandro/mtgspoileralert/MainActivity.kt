@@ -18,6 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
 import es.alejandro.mtgspoileralert.cards.CardsScreen
+import es.alejandro.mtgspoileralert.detail.CardDetailScreen
 import es.alejandro.mtgspoileralert.sets.SetsScreen
 import es.alejandro.mtgspoileralert.ui.theme.MTGSpoilerAlertTheme
 
@@ -37,9 +38,7 @@ class MainActivity : ComponentActivity() {
 fun MTGApp() {
     
     val navController = rememberNavController()
-    
 
-    
     NavHost(navController = navController, startDestination = "sets" ) {
         composable("sets") {
             SetsScreen { set ->
@@ -52,7 +51,15 @@ fun MTGApp() {
             val setString = remember {
                 it.arguments?.getString("set")
             }
-            CardsScreen(set = setString)
+            CardsScreen(set = setString) { cardId ->
+                navController.navigate("card/${cardId}")
+            }
+        }
+        composable("card/{id}", arguments = listOf(navArgument("id"){type = NavType.StringType})) {
+            val cardIdString = remember {
+                it.arguments?.getString("id")
+            }
+            CardDetailScreen(cardId = cardIdString)
         }
     }
 }

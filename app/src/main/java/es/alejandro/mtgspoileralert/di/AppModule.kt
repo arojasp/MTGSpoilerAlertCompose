@@ -11,6 +11,11 @@ import es.alejandro.mtgspoileralert.cards.repository.ICardsRepository
 import es.alejandro.mtgspoileralert.cards.service.ICardsService
 import es.alejandro.mtgspoileralert.cards.usecase.GetCardsUseCase
 import es.alejandro.mtgspoileralert.cards.usecase.IGetCardsUseCase
+import es.alejandro.mtgspoileralert.detail.repository.CardDetailRepository
+import es.alejandro.mtgspoileralert.detail.repository.ICardDetailRepository
+import es.alejandro.mtgspoileralert.detail.service.ICardDetailService
+import es.alejandro.mtgspoileralert.detail.usecase.GetCardDetailUseCase
+import es.alejandro.mtgspoileralert.detail.usecase.IGetCardDetailUseCase
 import es.alejandro.mtgspoileralert.sets.repository.ISetsRepository
 import es.alejandro.mtgspoileralert.sets.repository.SetsRepository
 import es.alejandro.mtgspoileralert.sets.service.ISetsService
@@ -46,6 +51,12 @@ class AppModule {
         return retrofit.create(ICardsService::class.java)
     }
 
+    @Provides
+    @Singleton
+    fun providesCardDetailService(retrofit: Retrofit): ICardDetailService {
+        return retrofit.create(ICardDetailService::class.java)
+    }
+
     @Module
     @InstallIn(SingletonComponent::class)
     interface AppModuleInt {
@@ -60,11 +71,19 @@ class AppModule {
 
         @Binds
         @Singleton
+        fun provideCardDetailRepository(repo: CardDetailRepository): ICardDetailRepository
+
+        @Binds
+        @Singleton
         fun providesSetsUseCase(uc: GetSetsUseCase): IGetSetUseCase
 
         @Binds
         @Singleton
         fun providesCardsUseCase(uc: GetCardsUseCase): IGetCardsUseCase
+
+        @Binds
+        @Singleton
+        fun providesCardDetailUseCase(uc: GetCardDetailUseCase): IGetCardDetailUseCase
 
     }
 

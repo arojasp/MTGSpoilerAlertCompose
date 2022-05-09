@@ -32,7 +32,8 @@ import es.alejandro.mtgspoileralert.sets.model.Set
 @Composable
 fun CardsScreen(
     viewModel: CardsViewModel = hiltViewModel(),
-    set: String?
+    set: String?,
+    onCardClick: (String) -> Unit
 ) {
 
     DisposableEffect(key1 = Unit) {
@@ -45,7 +46,9 @@ fun CardsScreen(
 
     when(val state = viewState) {
         is ViewState.Success -> {
-            CardsList(state.data)
+            CardsList(state.data) { cardId ->
+                onCardClick(cardId)
+            }
         }
         is ViewState.Error -> {
             Text(text = "Error ${state.errorMessage}")
@@ -57,11 +60,11 @@ fun CardsScreen(
 }
 
 @Composable
-fun CardsList(cards: List<Card>) {
+fun CardsList(cards: List<Card>, onCardClick: (String) -> Unit) {
     LazyColumn {
         items(cards) { item ->
-            SingleCardItem(item) {
-
+            SingleCardItem(item) { cardId ->
+                onCardClick(cardId)
             }
         }
     }
