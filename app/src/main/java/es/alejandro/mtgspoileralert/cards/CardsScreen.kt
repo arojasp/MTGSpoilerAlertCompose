@@ -81,7 +81,7 @@ fun SingleCardItem(
         .fillMaxWidth()
         .clickable { onClick(card.id) }, elevation = 8.dp) {
         Image(
-            modifier = Modifier.padding(16.dp).fillMaxSize(), painter = rememberImagePainter(
+            modifier = Modifier.fillMaxSize(), painter = rememberImagePainter(
                 card.image_uris.normal,
                 builder = {
                     size(OriginalSize)

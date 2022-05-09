@@ -1,5 +1,10 @@
 package es.alejandro.mtgspoileralert.detail.model
 
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "card_details")
 data class CardResponse(
     val artist: String,
     val artist_ids: List<String>,
@@ -20,35 +25,37 @@ data class CardResponse(
     val full_art: Boolean,
     val games: List<String>,
     val highres_image: Boolean,
+    @PrimaryKey
     val id: String,
     val illustration_id: String,
     val image_status: String,
-    val image_uris: ImageUris,
+    @Embedded val image_uris: ImageUris,
     val keywords: List<String>,
     val lang: String,
     val layout: String,
-    val legalities: Legalities,
+    @Embedded val legalities: Legalities,
     val mana_cost: String,
     val multiverse_ids: List<Int>,
     val name: String,
     val nonfoil: Boolean,
     val `object`: String,
     val oracle_id: String,
+    val oracle_text: String,
     val oversized: Boolean,
     val penny_rank: Int,
-    val prices: Prices,
+    @Embedded val prices: Prices,
     val prints_search_uri: String,
     val promo: Boolean,
-    val purchase_uris: PurchaseUris,
+    @Embedded val purchase_uris: PurchaseUris,
     val rarity: String,
-    val related_uris: RelatedUris,
+    @Embedded val related_uris: RelatedUris,
     val released_at: String,
     val reprint: Boolean,
     val reserved: Boolean,
     val rulings_uri: String,
     val scryfall_set_uri: String,
     val scryfall_uri: String,
-    val security_stamp: String,
+    val security_stamp: String?,
     val `set`: String,
     val set_id: String,
     val set_name: String,

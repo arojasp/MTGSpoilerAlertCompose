@@ -5,6 +5,6 @@ data class Prices(
     val eur_foil: String,
     val tix: String,
     val usd: String,
-    val usd_etched: Any,
+    val usd_etched: String?,
     val usd_foil: String
 )
