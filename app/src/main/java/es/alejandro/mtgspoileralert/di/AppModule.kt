@@ -21,6 +21,8 @@ import es.alejandro.mtgspoileralert.sets.repository.SetsRepository
 import es.alejandro.mtgspoileralert.sets.service.ISetsService
 import es.alejandro.mtgspoileralert.sets.usecase.GetSetsUseCase
 import es.alejandro.mtgspoileralert.sets.usecase.IGetSetUseCase
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -55,6 +57,12 @@ class AppModule {
     @Singleton
     fun providesCardDetailService(retrofit: Retrofit): ICardDetailService {
         return retrofit.create(ICardDetailService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDispatcher(): CoroutineDispatcher {
+        return Dispatchers.IO
     }
 
     @Module

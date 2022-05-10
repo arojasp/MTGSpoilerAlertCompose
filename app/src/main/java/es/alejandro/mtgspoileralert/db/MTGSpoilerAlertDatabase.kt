@@ -4,10 +4,12 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import es.alejandro.mtgspoileralert.detail.model.CardResponse
+import es.alejandro.mtgspoileralert.sets.model.Set
+import es.alejandro.mtgspoileralert.sets.model.SetsResponse
 
 @Database(
-    entities = [CardResponse::class],
-    version = 4,
+    entities = [CardResponse::class, Set::class],
+    version = 1,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

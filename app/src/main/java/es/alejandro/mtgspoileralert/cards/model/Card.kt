@@ -1,5 +1,8 @@
 package es.alejandro.mtgspoileralert.cards.model
 
+import androidx.room.Entity
+
+@Entity(tableName = "cards")
 data class Card(
     val all_parts: List<AllPart>,
     val artist: String,
