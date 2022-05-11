@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -14,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,6 +26,8 @@ import es.alejandro.mtgspoileralert.detail.CardDetail
 import es.alejandro.mtgspoileralert.sets.model.Set
 import es.alejandro.mtgspoileralert.sets.viewmodel.SetsViewModel
 import es.alejandro.mtgspoileralert.sets.viewmodel.ViewState
+import es.alejandro.mtgspoileralert.ui.theme.MTGSpoilerAlertTheme
+import java.util.*
 
 @Composable
 fun SetsScreen(
@@ -33,7 +37,7 @@ fun SetsScreen(
 
     val viewState by remember { viewModel.viewState }
 
-    when(val state = viewState) {
+    when (val state = viewState) {
         is ViewState.Success -> {
             Column {
                 Spacer(modifier = Modifier.height(30.dp))
@@ -64,16 +68,31 @@ fun SingleSetItem(
     Card(modifier = Modifier
         .padding(8.dp)
         .fillMaxWidth()
-        .clickable { onClick(set.code) }, elevation = 8.dp) {
+        .clickable { onClick(set.code) }, elevation = 8.dp
+    ) {
         Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             Image(
-                modifier = Modifier.size(80.dp), painter = rememberImagePainter(
+                modifier = Modifier
+                    .size(70.dp)
+                    .padding(8.dp), painter = rememberImagePainter(
                     data = set.icon_svg_uri,
                     builder = {
                         decoder(SvgDecoder(LocalContext.current))
                     }
                 ), contentDescription = null)
-            Text(text = set.name, fontSize = 24.sp)
+            Column {
+                Text(
+                    text = set.name,
+                    style = MaterialTheme.typography.h5,
+                    color = MaterialTheme.colors.primaryVariant
+                )
+                Text(
+                    text = set.code.toUpperCase(Locale.getDefault()),
+                    style = MaterialTheme.typography.subtitle1,
+                    color = MaterialTheme.colors.primary
+                )
+            }
+
         }
     }
 }
