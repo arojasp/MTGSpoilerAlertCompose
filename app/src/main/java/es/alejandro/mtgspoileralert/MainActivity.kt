@@ -10,22 +10,32 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import dagger.hilt.android.AndroidEntryPoint
+import es.alejandro.mtgspoileralert.backgroundservice.CallWorker
 import es.alejandro.mtgspoileralert.cards.CardsScreen
 import es.alejandro.mtgspoileralert.detail.CardDetailScreen
 import es.alejandro.mtgspoileralert.sets.SetsScreen
 import es.alejandro.mtgspoileralert.ui.theme.MTGSpoilerAlertTheme
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val request = PeriodicWorkRequestBuilder<CallWorker>(16, TimeUnit.MINUTES).build()
+        WorkManager.getInstance(applicationContext).enqueue(request)
+
+
         setContent {
             MTGSpoilerAlertTheme {
                 MTGApp()

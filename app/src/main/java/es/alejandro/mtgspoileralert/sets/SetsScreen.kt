@@ -36,7 +36,6 @@ fun SetsScreen(
     when(val state = viewState) {
         is ViewState.Success -> {
             Column {
-                Text("Sets")
                 Spacer(modifier = Modifier.height(30.dp))
                 LazyColumn {
                     items(state.data) { item ->
