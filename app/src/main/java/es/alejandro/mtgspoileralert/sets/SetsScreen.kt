@@ -20,8 +20,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import coil.decode.SvgDecoder
+import es.alejandro.mtgspoileralert.detail.CardDetail
 import es.alejandro.mtgspoileralert.sets.model.Set
 import es.alejandro.mtgspoileralert.sets.viewmodel.SetsViewModel
+import es.alejandro.mtgspoileralert.sets.viewmodel.ViewState
 
 @Composable
 fun SetsScreen(
@@ -29,17 +31,27 @@ fun SetsScreen(
     onItemClick: (String) -> Unit
 ) {
 
-    val listOfSets by remember { viewModel.listOfSets }
+    val viewState by remember { viewModel.viewState }
 
-    Column {
-        Text("Sets")
-        Spacer(modifier = Modifier.height(30.dp))
-        LazyColumn {
-            items(listOfSets) { item ->
-                SingleSetItem(set = item) {
-                    onItemClick(it)
+    when(val state = viewState) {
+        is ViewState.Success -> {
+            Column {
+                Text("Sets")
+                Spacer(modifier = Modifier.height(30.dp))
+                LazyColumn {
+                    items(state.data) { item ->
+                        SingleSetItem(set = item) {
+                            onItemClick(it)
+                        }
+                    }
                 }
             }
+        }
+        is ViewState.Error -> {
+            Text(text = "Error ${state.errorMessage}")
+        }
+        is ViewState.Loading -> {
+            Text(text = "Loading")
         }
     }
 }

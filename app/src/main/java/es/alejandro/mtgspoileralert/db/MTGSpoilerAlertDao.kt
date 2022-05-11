@@ -12,8 +12,8 @@ import es.alejandro.mtgspoileralert.sets.model.SetsResponse
 @Dao
 interface MTGSpoilerAlertDao {
 
-    @Query("SELECT * FROM card_details")
-    suspend fun getListOfStrings(): List<CardResponse>
+    @Query("SELECT * FROM card_details WHERE id = :cardId")
+    suspend fun getCardForId(cardId: String): List<CardResponse>
 
     @Insert
     suspend fun saveCard(card: CardResponse)
@@ -24,9 +24,9 @@ interface MTGSpoilerAlertDao {
     @Insert(onConflict = REPLACE)
     suspend fun saveSets(sets: List<Set>)
 
-    @Query("SELECT * FROM cards")
+    /*@Query("SELECT * FROM cards")
     suspend fun getAllCards(): List<Card>
 
     @Insert(onConflict = REPLACE)
-    suspend fun saveCards(cards: List<Card>)
+    suspend fun saveCards(cards: List<Card>)*/
 }

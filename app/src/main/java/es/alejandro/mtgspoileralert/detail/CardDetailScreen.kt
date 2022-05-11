@@ -19,6 +19,8 @@ import coil.compose.rememberImagePainter
 import es.alejandro.mtgspoileralert.detail.model.CardResponse
 import es.alejandro.mtgspoileralert.detail.viewmodel.CardDetailViewModel
 import es.alejandro.mtgspoileralert.R
+import es.alejandro.mtgspoileralert.cards.CardsList
+import es.alejandro.mtgspoileralert.detail.viewmodel.ViewState
 
 @Composable
 fun CardDetailScreen(
@@ -32,13 +34,19 @@ fun CardDetailScreen(
         onDispose { }
     }
 
-    val card by remember { viewModel.card }
+    val viewState by remember { viewModel.viewState }
 
-    card?.let {
-        CardDetail(card = it)
-
+    when(val state = viewState) {
+        is ViewState.Success -> {
+            CardDetail(card = state.data)
+        }
+        is ViewState.Error -> {
+            Text(text = "Error ${state.errorMessage}")
+        }
+        is ViewState.Loading -> {
+            Text(text = "Loading")
+        }
     }
-
 }
 
 @OptIn(ExperimentalCoilApi::class)
@@ -60,16 +68,6 @@ fun CardDetail(card: CardResponse) {
             )
             Text(text = type_line)
             Text(text = oracle_text)
-
-            Image(
-                modifier = Modifier.size(64.dp).clickable {
-
-                },
-                painter = painterResource(R.drawable.ic_heart),
-                contentDescription = null
-            )
-
-
         }
     }
 }

@@ -17,17 +17,12 @@ sealed class ViewState {
     object Loading: ViewState()
     data class Success(val data: List<Card>): ViewState()
     data class Error(val errorMessage: String): ViewState()
-
 }
 
 @HiltViewModel
 class CardsViewModel @Inject constructor(
     val useCase: IGetCardsUseCase
 ): ViewModel() {
-
-    init {
-
-    }
 
     private val _viewState: MutableState<ViewState> = mutableStateOf(ViewState.Loading)
     val viewState: State<ViewState> = _viewState

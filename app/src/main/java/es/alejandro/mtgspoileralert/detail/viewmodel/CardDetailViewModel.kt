@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import es.alejandro.mtgspoileralert.cards.viewmodel.ViewState
+import es.alejandro.mtgspoileralert.cards.model.Card
 import es.alejandro.mtgspoileralert.db.MTGSpoilerAlertDao
 import es.alejandro.mtgspoileralert.detail.model.CardResponse
 import es.alejandro.mtgspoileralert.detail.usecase.GetCardDetailUseCase
@@ -15,30 +15,33 @@ import kotlinx.coroutines.launch
 import java.lang.Exception
 import javax.inject.Inject
 
+sealed class ViewState {
+    object Loading: ViewState()
+    data class Success(val data: CardResponse): ViewState()
+    data class Error(val errorMessage: String): ViewState()
+}
+
 @HiltViewModel
 class CardDetailViewModel @Inject constructor(
         val useCase: GetCardDetailUseCase,
         val dao: MTGSpoilerAlertDao
 ): ViewModel() {
 
-    private val _card: MutableState<CardResponse?> = mutableStateOf(null)
-    val card: State<CardResponse?> = _card
+    private val _viewState: MutableState<ViewState> = mutableStateOf(ViewState.Loading)
+    val viewState: State<ViewState> = _viewState
 
     fun getCardDetail(cardId: String) {
         viewModelScope.launch {
             try {
                 val cardDetail = useCase(cardId)
-                dao.saveCard(cardDetail)
-                _card.value = cardDetail
+                // dao.saveCard(cardDetail)
+                _viewState.value = ViewState.Success(cardDetail)
             } catch (e: Exception) {
                 Log.e("MTGA", e.message ?: "")
+                _viewState.value = ViewState.Error(e.message ?: "Unknown error")
+
             }
         }
     }
 
-    fun saveToFavourites(card: CardResponse) {
-        viewModelScope.launch {
-            dao.saveCard(card)
-        }
-    }
 }
