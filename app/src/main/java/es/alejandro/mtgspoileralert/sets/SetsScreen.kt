@@ -92,7 +92,7 @@ fun SingleSetItem(
                 )
                 Text(
                     text = set.code.uppercase(),
-                    style = MaterialTheme.typography.subtitle1,
+                    style = MaterialTheme.typography.body1,
                     color = MaterialTheme.colors.secondary
                 )
             }

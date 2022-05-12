@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MTGSpoilerAlertTheme {
-                    MTGApp()
+                MTGApp()
             }
         }
     }
@@ -47,20 +47,23 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MTGApp() {
-    
+
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "sets" ) {
+    NavHost(navController = navController, startDestination = "sets") {
         composable("sets") {
             Scaffold(
                 topBar = {
                     TopAppBar(
-                        title = { Text("Sets")},
+                        title = { Text("Sets", style = MaterialTheme.typography.h1) },
                         actions = {
                             IconButton(onClick = {
                                 navController.navigate("settings")
                             }) {
-                                Icon(imageVector = Icons.Default.Settings, contentDescription = null)
+                                Icon(
+                                    imageVector = Icons.Default.Settings,
+                                    contentDescription = null
+                                )
                             }
                         }
                     )
@@ -71,7 +74,7 @@ fun MTGApp() {
                 }
             }
         }
-        composable("cards/{set}", arguments = listOf(navArgument("set"){
+        composable("cards/{set}", arguments = listOf(navArgument("set") {
             type = NavType.StringType
         })) {
             val setString = remember {
@@ -80,9 +83,14 @@ fun MTGApp() {
             Scaffold(
                 topBar = {
                     TopAppBar(
-                        title = { Text("Cards")},
-                        navigationIcon = { IconButton(onClick = { navController.popBackStack() }) {
-                            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null) }
+                        title = { Text("Cards", style = MaterialTheme.typography.h1) },
+                        navigationIcon = {
+                            IconButton(onClick = { navController.popBackStack() }) {
+                                Icon(
+                                    imageVector = Icons.Default.ArrowBack,
+                                    contentDescription = null
+                                )
+                            }
                         }
                     )
                 }
@@ -92,16 +100,24 @@ fun MTGApp() {
                 }
             }
         }
-        composable("card/{id}", arguments = listOf(navArgument("id"){type = NavType.StringType})) {
+        composable(
+            "card/{id}",
+            arguments = listOf(navArgument("id") { type = NavType.StringType })
+        ) {
             val cardIdString = remember {
                 it.arguments?.getString("id")
             }
             Scaffold(
                 topBar = {
                     TopAppBar(
-                        title = { Text("Details")},
-                        navigationIcon = { IconButton(onClick = { navController.popBackStack() }) {
-                            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null) }
+                        title = { Text("Details", style = MaterialTheme.typography.h1) },
+                        navigationIcon = {
+                            IconButton(onClick = { navController.popBackStack() }) {
+                                Icon(
+                                    imageVector = Icons.Default.ArrowBack,
+                                    contentDescription = null
+                                )
+                            }
                         }
                     )
                 }
@@ -109,13 +125,18 @@ fun MTGApp() {
                 CardDetailScreen(cardId = cardIdString)
             }
         }
-        composable("settings"){
+        composable("settings") {
             Scaffold(
                 topBar = {
                     TopAppBar(
-                        title = { Text("Settings")},
-                        navigationIcon = { IconButton(onClick = { navController.popBackStack() }) {
-                            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null) }
+                        title = { Text("Settings", style = MaterialTheme.typography.h1) },
+                        navigationIcon = {
+                            IconButton(onClick = { navController.popBackStack() }) {
+                                Icon(
+                                    imageVector = Icons.Default.ArrowBack,
+                                    contentDescription = null
+                                )
+                            }
                         }
                     )
                 }
