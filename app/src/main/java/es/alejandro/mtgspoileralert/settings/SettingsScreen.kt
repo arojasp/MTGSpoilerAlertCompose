@@ -24,19 +24,47 @@ import java.util.concurrent.TimeUnit
 
 @Composable
 fun SettingsScreen() {
+    var coreCheckedState by remember { mutableStateOf(false) }
+    var commanderCheckedState by remember { mutableStateOf(false) }
+
+    var enabledElements by remember {
+        mutableStateOf(
+            checkEnabledElements(
+                coreCheckedState,
+                commanderCheckedState
+            )
+        )
+    }
+
     Column(modifier = Modifier.padding(16.dp)) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            val checkedState = remember { mutableStateOf(false) }
-
             Text(text = "Listen to main sets")
-            Switch(checked = checkedState.value, onCheckedChange = { checkedState.value = it })
+            Switch(
+                checked = coreCheckedState,
+                onCheckedChange = {
+                    coreCheckedState = it
+                    enabledElements = checkEnabledElements(
+                        coreCheckedState,
+                        commanderCheckedState
+                    )
+                })
         }
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            val checkedState = remember { mutableStateOf(false) }
-
             Text(text = "Listen to commander sets")
-            Switch(checked = checkedState.value, onCheckedChange = { checkedState.value = it })
+            Switch(
+                checked = commanderCheckedState,
+                onCheckedChange = {
+                    commanderCheckedState = it
+                    enabledElements = checkEnabledElements(
+                        coreCheckedState,
+                        commanderCheckedState
+                    )
+                })
         }
+
+        Spacer(modifier = Modifier.size(30.dp))
+
+        DropDown(enabledElements)
 
         var periodInterval by remember {
             mutableStateOf(1f)
@@ -45,15 +73,18 @@ fun SettingsScreen() {
             value = periodInterval,
             onValueChange = { periodInterval = it },
             valueRange = 1f..60f,
+            enabled = enabledElements,
             steps = 99
         )
 
-        DropDown()
     }
 }
 
+fun checkEnabledElements(coreCheckedState: Boolean, commanderCheckedState: Boolean): Boolean =
+    coreCheckedState || commanderCheckedState
+
 @Composable
-fun DropDown() {
+fun DropDown(enabled: Boolean) {
     var expanded by remember {
         mutableStateOf(false)
     }
@@ -79,9 +110,14 @@ fun DropDown() {
             .onGloballyPositioned { layoutCoordinates ->
                 textFiledSize = layoutCoordinates.size.toSize()
             },
+        enabled = enabled,
+        readOnly = true,
         label = { Text(text = "Interval unit") },
         trailingIcon = {
-            Icon(icon, contentDescription = null, Modifier.clickable { expanded = !expanded })
+            Icon(
+                icon,
+                contentDescription = null,
+                Modifier.clickable(enabled = enabled) { expanded = !expanded })
         })
 
     DropdownMenu(
