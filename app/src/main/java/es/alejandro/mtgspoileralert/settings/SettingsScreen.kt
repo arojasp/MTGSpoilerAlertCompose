@@ -37,13 +37,15 @@ fun SettingsScreen() {
             Text(text = "Listen to commander sets")
             Switch(checked = checkedState.value, onCheckedChange = { checkedState.value = it })
         }
-        var text by remember { mutableStateOf("") }
-        OutlinedTextField(
-            value = text,
-            onValueChange = { text = it },
-            label = { Text("Interval period") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.width((LocalConfiguration.current.screenWidthDp / 2).dp)
+
+        var periodInterval by remember {
+            mutableStateOf(1f)
+        }
+        Slider(
+            value = periodInterval,
+            onValueChange = { periodInterval = it },
+            valueRange = 1f..60f,
+            steps = 99
         )
 
         DropDown()
