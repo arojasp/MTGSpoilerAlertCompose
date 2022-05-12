@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -54,7 +55,11 @@ fun SetsScreen(
             Text(text = "Error ${state.errorMessage}")
         }
         is ViewState.Loading -> {
-            Text(text = "Loading")
+            Column(modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally) {
+                CircularProgressIndicator(modifier = Modifier.size(100.dp))
+            }
         }
     }
 }
@@ -87,7 +92,7 @@ fun SingleSetItem(
                     color = MaterialTheme.colors.primary
                 )
                 Text(
-                    text = set.code.toUpperCase(Locale.getDefault()),
+                    text = set.code.uppercase(),
                     style = MaterialTheme.typography.subtitle1,
                     color = MaterialTheme.colors.secondary
                 )

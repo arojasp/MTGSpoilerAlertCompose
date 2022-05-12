@@ -35,7 +35,6 @@ class MainActivity : ComponentActivity() {
         val request = PeriodicWorkRequestBuilder<CallWorker>(16, TimeUnit.MINUTES).build()
         WorkManager.getInstance(applicationContext).enqueue(request)
 
-
         setContent {
             MTGSpoilerAlertTheme {
                 MTGApp()
