@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -24,6 +25,7 @@ import es.alejandro.mtgspoileralert.backgroundservice.CallWorker
 import es.alejandro.mtgspoileralert.cards.CardsScreen
 import es.alejandro.mtgspoileralert.detail.CardDetailScreen
 import es.alejandro.mtgspoileralert.sets.SetsScreen
+import es.alejandro.mtgspoileralert.settings.SettingsScreen
 import es.alejandro.mtgspoileralert.ui.theme.MTGSpoilerAlertTheme
 import java.util.concurrent.TimeUnit
 
@@ -32,7 +34,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val request = PeriodicWorkRequestBuilder<CallWorker>(16, TimeUnit.MINUTES).build()
+        val request = PeriodicWorkRequestBuilder<CallWorker>(15, TimeUnit.MINUTES).build()
         WorkManager.getInstance(applicationContext).enqueue(request)
 
         setContent {
@@ -52,7 +54,16 @@ fun MTGApp() {
         composable("sets") {
             Scaffold(
                 topBar = {
-                    TopAppBar(title = { Text("Sets")})
+                    TopAppBar(
+                        title = { Text("Sets")},
+                        actions = {
+                            IconButton(onClick = {
+                                navController.navigate("settings")
+                            }) {
+                                Icon(imageVector = Icons.Default.Settings, contentDescription = null)
+                            }
+                        }
+                    )
                 }
             ) {
                 SetsScreen { set ->
@@ -96,6 +107,20 @@ fun MTGApp() {
                 }
             ) {
                 CardDetailScreen(cardId = cardIdString)
+            }
+        }
+        composable("settings"){
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        title = { Text("Settings")},
+                        navigationIcon = { IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null) }
+                        }
+                    )
+                }
+            ) {
+                SettingsScreen()
             }
         }
     }
