@@ -10,6 +10,8 @@ interface ICardsService {
         @Query("order") set: String = "set",
         @Query("q") code: String,
         @Query("unique") unique: String = "prints",
-        @Query("order") order: String = "spoiled"
+        @Query("order") order: String = "spoiled",
+        @Query("include_extras") include_extras: Boolean = false,
+        @Query("page") page: Int
     ): CardsResponse
 }

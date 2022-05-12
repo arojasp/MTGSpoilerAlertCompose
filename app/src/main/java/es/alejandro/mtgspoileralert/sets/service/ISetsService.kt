@@ -9,5 +9,3 @@ interface ISetsService {
     suspend fun getAllSets(): SetsResponse
 
 }
-
-//https://api.scryfall.com/sets
