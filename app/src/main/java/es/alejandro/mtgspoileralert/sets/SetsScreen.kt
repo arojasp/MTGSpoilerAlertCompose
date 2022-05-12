@@ -70,10 +70,10 @@ fun SingleSetItem(
         .fillMaxWidth()
         .clickable { onClick(set.code) }, elevation = 8.dp
     ) {
-        Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(modifier = Modifier.padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
             Image(
                 modifier = Modifier
-                    .size(70.dp)
+                    .size(60.dp)
                     .padding(8.dp), painter = rememberImagePainter(
                     data = set.icon_svg_uri,
                     builder = {
@@ -83,13 +83,13 @@ fun SingleSetItem(
             Column {
                 Text(
                     text = set.name,
-                    style = MaterialTheme.typography.h5,
-                    color = MaterialTheme.colors.primaryVariant
+                    style = MaterialTheme.typography.h6,
+                    color = MaterialTheme.colors.primary
                 )
                 Text(
                     text = set.code.toUpperCase(Locale.getDefault()),
                     style = MaterialTheme.typography.subtitle1,
-                    color = MaterialTheme.colors.primary
+                    color = MaterialTheme.colors.secondary
                 )
             }
 

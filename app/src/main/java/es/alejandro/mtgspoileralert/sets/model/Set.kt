@@ -23,7 +23,7 @@ data class Set(
     val released_at: String?,
     val scryfall_uri: String?,
     val search_uri: String?,
-    val set_type: String?,
+    val set_type: SetType?,
     val tcgplayer_id: Int?,
     val uri: String?
 )

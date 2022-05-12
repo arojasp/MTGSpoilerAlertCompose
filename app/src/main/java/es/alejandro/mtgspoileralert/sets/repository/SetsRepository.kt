@@ -3,6 +3,7 @@ package es.alejandro.mtgspoileralert.sets.repository
 import android.util.Log
 import es.alejandro.mtgspoileralert.db.MTGSpoilerAlertDao
 import es.alejandro.mtgspoileralert.sets.model.Set
+import es.alejandro.mtgspoileralert.sets.model.SetType
 import es.alejandro.mtgspoileralert.sets.model.SetsResponse
 import es.alejandro.mtgspoileralert.sets.service.ISetsService
 import kotlinx.coroutines.CoroutineDispatcher
@@ -23,8 +24,12 @@ class SetsRepository @Inject constructor(
         return withContext(dispatcher){
             val response = try{
                 val hold = service.getAllSets()
-                dao.saveSets(hold.data)
-                hold
+                val newList = hold.data.filter {
+                    it.set_type == SetType.EXPANSION || it.set_type == SetType.CORE || it.set_type == SetType.COMMANDER
+                }
+                val properResponse = hold.copy(data = newList)
+                //dao.saveSets(properResponse.data)
+                properResponse
             } catch (e: Exception) {
                 SetsResponse(dao.getAllSets(), false, "")
             }
