@@ -2,7 +2,6 @@ package es.alejandro.mtgspoileralert.settings
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -15,15 +14,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import androidx.hilt.navigation.compose.hiltViewModel
+import es.alejandro.mtgspoileralert.settings.viewmodel.SettingsViewModel
 import java.util.concurrent.TimeUnit
 
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(
+    viewModel: SettingsViewModel = hiltViewModel()
+) {
     var coreCheckedState by remember { mutableStateOf(false) }
     var commanderCheckedState by remember { mutableStateOf(false) }
 
@@ -59,6 +60,7 @@ fun SettingsScreen() {
                         coreCheckedState,
                         commanderCheckedState
                     )
+                    viewModel.saveCommanderListen(it)
                 })
         }
 
