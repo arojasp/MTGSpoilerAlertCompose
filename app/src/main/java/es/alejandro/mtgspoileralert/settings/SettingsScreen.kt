@@ -7,6 +7,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -91,16 +92,27 @@ fun SettingsSetupScreen(viewModel: SettingsViewModel, settings: Settings) {
         var periodInterval by remember {
             mutableStateOf(settings.interval.first.toFloat())
         }
+        val minRangeValue = 1f
+        val maxRangeValue = 60f
         Slider(
             value = periodInterval,
             onValueChange = {
                 periodInterval = it
                 viewModel.saveTimeInterval(it.toInt())
             },
-            valueRange = 1f..60f,
+            valueRange = minRangeValue..maxRangeValue,
             enabled = enabledElements,
             steps = 99
         )
+        Spacer(modifier = Modifier.size(15.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(text = "${minRangeValue.toInt()}")
+            Text(style = MaterialTheme.typography.h1, text = "${periodInterval.toInt()}")
+            Text(text = "${maxRangeValue.toInt()}")
+        }
 
     }
 }
