@@ -16,7 +16,7 @@ class SettingsDataStoreManager @Inject constructor(@ApplicationContext appContex
 
     companion object {
         val CORE_LISTEN = booleanPreferencesKey("core_listen")
-        val COMMANDER_LISTEN = booleanPreferencesKey("core_listen")
+        val COMMANDER_LISTEN = booleanPreferencesKey("commander_listen")
         val INTERVAL = intPreferencesKey("interval")
         val TIME_UNIT = stringPreferencesKey("time_unit")
     }
@@ -32,6 +32,30 @@ class SettingsDataStoreManager @Inject constructor(@ApplicationContext appContex
         }
     }
 
+    suspend fun setCommanderListening(isListening: Boolean) {
+        settingsDataStore.edit { settings ->
+            settings[COMMANDER_LISTEN] = isListening
+        }
+    }
+
+    suspend fun setCoreListening(isListening: Boolean) {
+        settingsDataStore.edit { settings ->
+            settings[CORE_LISTEN] = isListening
+        }
+    }
+
+    suspend fun setTimeInterval(interval: Int) {
+        settingsDataStore.edit { settingsDataStore ->
+            settingsDataStore[INTERVAL] = interval
+        }
+    }
+
+    suspend fun setTimeUnit(timeUnit: TimeUnit) {
+        settingsDataStore.edit { settingsDataStore ->
+            settingsDataStore[TIME_UNIT] = timeUnit.toString()
+        }
+    }
+
     val settings: Flow<Settings> = settingsDataStore.data.map { settingsPreferences ->
         Settings(
             coreSetListen = settingsPreferences[CORE_LISTEN] ?: false,
@@ -44,24 +68,8 @@ class SettingsDataStoreManager @Inject constructor(@ApplicationContext appContex
 
     }
 
-    suspend fun setCoreListening(isListening: Boolean) {
-        settingsDataStore.edit { settings ->
-            settings[CORE_LISTEN] = isListening
-        }
-    }
 
-    val isCoreListening: Flow<Boolean> = settingsDataStore.data.map { preferences ->
-        preferences[CORE_LISTEN] ?: false
-    }
 
-    suspend fun setCommanderListening(isListening: Boolean) {
-        settingsDataStore.edit { settings ->
-            settings[COMMANDER_LISTEN] = isListening
-        }
-    }
 
-    val isCommanderListening: Flow<Boolean> = settingsDataStore.data.map { preferences ->
-        preferences[COMMANDER_LISTEN] ?: false
-    }
 
 }

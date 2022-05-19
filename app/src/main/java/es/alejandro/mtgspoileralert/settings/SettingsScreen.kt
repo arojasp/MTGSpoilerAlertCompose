@@ -6,27 +6,46 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
+import es.alejandro.mtgspoileralert.datastore.SettingsDataStoreManager
+import es.alejandro.mtgspoileralert.settings.model.Settings
 import es.alejandro.mtgspoileralert.settings.viewmodel.SettingsViewModel
+import es.alejandro.mtgspoileralert.settings.viewmodel.ViewState
 import java.util.concurrent.TimeUnit
 
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
-    var coreCheckedState by remember { mutableStateOf(false) }
-    var commanderCheckedState by remember { mutableStateOf(false) }
+
+    val viewState by remember { viewModel.viewState }
+
+    when (val state = viewState) {
+        is ViewState.Success -> {
+            SettingsSetupScreen(viewModel = viewModel, settings = state.data)
+        }
+        is ViewState.Error -> {
+
+        }
+        is ViewState.Loading -> {
+
+        }
+    }
+
+}
+
+@Composable
+fun SettingsSetupScreen(viewModel: SettingsViewModel, settings: Settings) {
+    var coreCheckedState by remember { mutableStateOf(settings.coreSetListen) }
+    var commanderCheckedState by remember { mutableStateOf(settings.commanderSetListen) }
 
     var enabledElements by remember {
         mutableStateOf(
@@ -48,6 +67,7 @@ fun SettingsScreen(
                         coreCheckedState,
                         commanderCheckedState
                     )
+                    viewModel.saveCoreListen(it)
                 })
         }
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -66,14 +86,17 @@ fun SettingsScreen(
 
         Spacer(modifier = Modifier.size(30.dp))
 
-        DropDown(enabledElements)
+        DropDown(enabledElements, viewModel, settings)
 
         var periodInterval by remember {
-            mutableStateOf(1f)
+            mutableStateOf(settings.interval.first.toFloat())
         }
         Slider(
             value = periodInterval,
-            onValueChange = { periodInterval = it },
+            onValueChange = {
+                periodInterval = it
+                viewModel.saveTimeInterval(it.toInt())
+            },
             valueRange = 1f..60f,
             enabled = enabledElements,
             steps = 99
@@ -86,13 +109,13 @@ fun checkEnabledElements(coreCheckedState: Boolean, commanderCheckedState: Boole
     coreCheckedState || commanderCheckedState
 
 @Composable
-fun DropDown(enabled: Boolean) {
+fun DropDown(enabled: Boolean, viewModel: SettingsViewModel, settings: Settings) {
     var expanded by remember {
         mutableStateOf(false)
     }
     val list = listOf(TimeUnit.MINUTES, TimeUnit.HOURS, TimeUnit.DAYS)
     var selectedItem by remember {
-        mutableStateOf(TimeUnit.MINUTES)
+        mutableStateOf(settings.interval.second)
     }
 
     var textFiledSize by remember {
@@ -106,7 +129,11 @@ fun DropDown(enabled: Boolean) {
     }
 
     OutlinedTextField(value = selectedItem.toString(),
-        onValueChange = { selectedItem = TimeUnit.valueOf(it) },
+        onValueChange = {
+            val timeUnit = TimeUnit.valueOf(it)
+            selectedItem = timeUnit
+            viewModel.saveTimeUnit(timeUnit)
+        },
         modifier = Modifier
             .fillMaxWidth()
             .onGloballyPositioned { layoutCoordinates ->
@@ -129,6 +156,7 @@ fun DropDown(enabled: Boolean) {
         list.forEach { timeUnit ->
             DropdownMenuItem(onClick = {
                 selectedItem = timeUnit
+                viewModel.saveTimeUnit(timeUnit)
                 expanded = false
             }) {
                 Text(text = timeUnit.toString())
