@@ -25,10 +25,10 @@ class SetsRepository @Inject constructor(
             val response = try{
                 val hold = service.getAllSets()
                 val newList = hold.data.filter {
-                    it.set_type == SetType.EXPANSION || it.set_type == SetType.CORE || it.set_type == SetType.COMMANDER
+                    (it.set_type == SetType.EXPANSION || it.set_type == SetType.CORE || it.set_type == SetType.COMMANDER) && it.card_count > 0
                 }
                 val properResponse = hold.copy(data = newList)
-                //dao.saveSets(properResponse.data)
+                dao.saveSets(properResponse.data)
                 properResponse
             } catch (e: Exception) {
                 SetsResponse(dao.getAllSets(), false, "")

@@ -8,7 +8,7 @@ data class Set(
     val arena_code: String?,
     val block: String?,
     val block_code: String?,
-    val card_count: Int?,
+    val card_count: Int = 0,
     val code: String,
     val digital: Boolean?,
     val foil_only: Boolean?,

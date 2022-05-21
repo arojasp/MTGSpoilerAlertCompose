@@ -75,7 +75,7 @@ fun CardDetail(card: CardResponse) {
             Text(text = type_line,
                 style = MaterialTheme.typography.body1)
             Spacer(modifier = Modifier.size(20.dp))
-            Text(text = oracle_text,
+            Text(text = oracle_text ?: "",
                 style = MaterialTheme.typography.body1)
         }
     }

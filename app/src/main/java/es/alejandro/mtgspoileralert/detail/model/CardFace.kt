@@ -8,6 +8,6 @@ data class CardFace(
     val mana_cost: String,
     val name: String,
     val `object`: String,
-    val oracle_text: String,
+    val oracle_text: String? = "",
     val type_line: String
 )

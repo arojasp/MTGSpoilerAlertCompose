@@ -1,5 +1,6 @@
 package es.alejandro.mtgspoileralert.cards.repository
 
+import android.util.Log
 import es.alejandro.mtgspoileralert.cards.model.Card
 import es.alejandro.mtgspoileralert.cards.model.CardsResponse
 import es.alejandro.mtgspoileralert.cards.service.ICardsService
@@ -17,14 +18,24 @@ class CardsRepository @Inject constructor(
         var pageNumber = 1
         val holdCardList = mutableListOf<Card>()
         var response: CardsResponse
-        response = service.getCardsForSet(code = codeSet, page = pageNumber)
-        holdCardList.addAll(response.data)
+        response = try {
+            var hold = service.getCardsForSet(code = codeSet, page = pageNumber)
+            holdCardList.addAll(hold.data)
 
-        while (response.has_more){
-            pageNumber++
-            response = service.getCardsForSet(code = codeSet, page = pageNumber)
-            holdCardList.addAll(response.data)
+            while (hold.has_more){
+                pageNumber++
+                hold = service.getCardsForSet(code = codeSet, page = pageNumber)
+                holdCardList.addAll(hold.data)
+            }
+            val properResponse = hold.copy(data = holdCardList)
+            dao.saveCards(holdCardList)
+            properResponse
+        } catch (e: Exception) {
+            Log.d("TAG", "${e.message}")
+            val storedCards = dao.getCardsForSet(codeSet)
+            CardsResponse(storedCards, false, "", "", storedCards.size)
         }
+
         return response
     }
 }
