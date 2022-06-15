@@ -38,12 +38,6 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun saveCommanderListen(isListening: Boolean) {
-        viewModelScope.launch {
-            dataStoreManager.setCommanderListening(isListening)
-        }
-    }
-
     fun saveCoreListen(isListening: Boolean) {
         viewModelScope.launch {
             dataStoreManager.setCoreListening(isListening)

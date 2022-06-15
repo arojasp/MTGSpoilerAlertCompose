@@ -16,7 +16,6 @@ class SettingsDataStoreManager @Inject constructor(@ApplicationContext appContex
 
     companion object {
         val CORE_LISTEN = booleanPreferencesKey("core_listen")
-        val COMMANDER_LISTEN = booleanPreferencesKey("commander_listen")
         val INTERVAL = intPreferencesKey("interval")
         val TIME_UNIT = stringPreferencesKey("time_unit")
     }
@@ -26,15 +25,8 @@ class SettingsDataStoreManager @Inject constructor(@ApplicationContext appContex
     suspend fun setSettings(settings: Settings) {
         settingsDataStore.edit { settingsPreferences ->
             settingsPreferences[CORE_LISTEN] = settings.coreSetListen
-            settingsPreferences[COMMANDER_LISTEN] = settings.commanderSetListen
             settingsPreferences[INTERVAL] = settings.interval.first
             settingsPreferences[TIME_UNIT] = settings.interval.second.toString()
-        }
-    }
-
-    suspend fun setCommanderListening(isListening: Boolean) {
-        settingsDataStore.edit { settings ->
-            settings[COMMANDER_LISTEN] = isListening
         }
     }
 
@@ -59,7 +51,6 @@ class SettingsDataStoreManager @Inject constructor(@ApplicationContext appContex
     val settings: Flow<Settings> = settingsDataStore.data.map { settingsPreferences ->
         Settings(
             coreSetListen = settingsPreferences[CORE_LISTEN] ?: false,
-            commanderSetListen = settingsPreferences[COMMANDER_LISTEN] ?: false,
             interval = Pair(
                 settingsPreferences[INTERVAL] ?: 15,
                 TimeUnit.valueOf(settingsPreferences[TIME_UNIT] ?: TimeUnit.MINUTES.toString())

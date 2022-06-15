@@ -68,7 +68,7 @@ fun CardDetail(card: CardResponse) {
             ) {
                 Text(text = name,
                     style = MaterialTheme.typography.body1)
-                Text(text = mana_cost,
+                Text(text = mana_cost ?: "",
                     style = MaterialTheme.typography.body1)
             }
             Spacer(modifier = Modifier.size(20.dp))

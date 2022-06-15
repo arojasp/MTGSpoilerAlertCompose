@@ -46,14 +46,10 @@ fun SettingsScreen(
 @Composable
 fun SettingsSetupScreen(viewModel: SettingsViewModel, settings: Settings) {
     var coreCheckedState by remember { mutableStateOf(settings.coreSetListen) }
-    var commanderCheckedState by remember { mutableStateOf(settings.commanderSetListen) }
 
     var enabledElements by remember {
         mutableStateOf(
-            checkEnabledElements(
-                coreCheckedState,
-                commanderCheckedState
-            )
+            coreCheckedState
         )
     }
 
@@ -64,24 +60,10 @@ fun SettingsSetupScreen(viewModel: SettingsViewModel, settings: Settings) {
                 checked = coreCheckedState,
                 onCheckedChange = {
                     coreCheckedState = it
-                    enabledElements = checkEnabledElements(
-                        coreCheckedState,
-                        commanderCheckedState
-                    )
+                    enabledElements =
+                        coreCheckedState
+
                     viewModel.saveCoreListen(it)
-                })
-        }
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text(text = "Listen to commander sets")
-            Switch(
-                checked = commanderCheckedState,
-                onCheckedChange = {
-                    commanderCheckedState = it
-                    enabledElements = checkEnabledElements(
-                        coreCheckedState,
-                        commanderCheckedState
-                    )
-                    viewModel.saveCommanderListen(it)
                 })
         }
 
@@ -116,9 +98,6 @@ fun SettingsSetupScreen(viewModel: SettingsViewModel, settings: Settings) {
 
     }
 }
-
-fun checkEnabledElements(coreCheckedState: Boolean, commanderCheckedState: Boolean): Boolean =
-    coreCheckedState || commanderCheckedState
 
 @Composable
 fun DropDown(enabled: Boolean, viewModel: SettingsViewModel, settings: Settings) {

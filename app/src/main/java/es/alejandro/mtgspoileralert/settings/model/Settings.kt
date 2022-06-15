@@ -4,6 +4,5 @@ import java.util.concurrent.TimeUnit
 
 data class Settings (
     val coreSetListen: Boolean = false,
-    val commanderSetListen: Boolean = false,
     val interval: Pair<Int, TimeUnit> = Pair(15, TimeUnit.MINUTES)
 )
