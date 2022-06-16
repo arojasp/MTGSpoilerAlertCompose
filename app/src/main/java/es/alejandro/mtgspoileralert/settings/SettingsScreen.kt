@@ -1,6 +1,8 @@
 package es.alejandro.mtgspoileralert.settings
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -55,7 +57,7 @@ fun SettingsSetupScreen(viewModel: SettingsViewModel, settings: Settings) {
 
     Column(modifier = Modifier.padding(16.dp)) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text(text = "Listen to main sets")
+            Text(text = "Listen to new cards")
             Switch(
                 checked = coreCheckedState,
                 onCheckedChange = {
@@ -69,12 +71,22 @@ fun SettingsSetupScreen(viewModel: SettingsViewModel, settings: Settings) {
 
         Spacer(modifier = Modifier.size(30.dp))
 
-        DropDown(enabledElements, viewModel, settings)
+        var minRangeValue by remember {
+            mutableStateOf(1f)
+        }
 
         var periodInterval by remember {
             mutableStateOf(settings.interval.first.toFloat())
         }
-        val minRangeValue = 1f
+
+        DropDown(enabledElements, viewModel, settings) { timeUnitSelected ->
+            if (timeUnitSelected == TimeUnit.MINUTES) {
+                minRangeValue = 15f
+                if (periodInterval < 15) periodInterval = 15f
+            } else
+                minRangeValue = 1f
+        }
+
         val maxRangeValue = 60f
         Slider(
             value = periodInterval,
@@ -100,7 +112,12 @@ fun SettingsSetupScreen(viewModel: SettingsViewModel, settings: Settings) {
 }
 
 @Composable
-fun DropDown(enabled: Boolean, viewModel: SettingsViewModel, settings: Settings) {
+fun DropDown(
+    enabled: Boolean,
+    viewModel: SettingsViewModel,
+    settings: Settings,
+    itemSelected: (timeUnitSelected: TimeUnit) -> Unit
+) {
     var expanded by remember {
         mutableStateOf(false)
     }
@@ -119,38 +136,51 @@ fun DropDown(enabled: Boolean, viewModel: SettingsViewModel, settings: Settings)
         Icons.Filled.KeyboardArrowDown
     }
 
-    OutlinedTextField(value = selectedItem.toString(),
-        onValueChange = {
-            val timeUnit = TimeUnit.valueOf(it)
-            selectedItem = timeUnit
-            viewModel.saveTimeUnit(timeUnit)
-        },
-        modifier = Modifier
-            .fillMaxWidth()
-            .onGloballyPositioned { layoutCoordinates ->
-                textFiledSize = layoutCoordinates.size.toSize()
-            },
-        enabled = enabled,
-        readOnly = true,
-        label = { Text(text = "Interval unit") },
-        trailingIcon = {
-            Icon(
-                icon,
-                contentDescription = null,
-                Modifier.clickable(enabled = enabled) { expanded = !expanded })
-        })
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed: Boolean by interactionSource.collectIsPressedAsState()
 
-    DropdownMenu(
-        expanded = expanded, onDismissRequest = { expanded = false },
-        modifier = Modifier.width(with(LocalDensity.current) { textFiledSize.width.toDp() })
-    ) {
-        list.forEach { timeUnit ->
-            DropdownMenuItem(onClick = {
+    if (isPressed) {
+        expanded = !expanded
+    }
+
+    Column {
+
+
+        OutlinedTextField(value = selectedItem.toString(),
+            onValueChange = {
+                val timeUnit = TimeUnit.valueOf(it)
                 selectedItem = timeUnit
                 viewModel.saveTimeUnit(timeUnit)
-                expanded = false
-            }) {
-                Text(text = timeUnit.toString())
+            },
+            interactionSource = interactionSource,
+            modifier = Modifier
+                .fillMaxWidth()
+                .onGloballyPositioned { layoutCoordinates ->
+                    textFiledSize = layoutCoordinates.size.toSize()
+                },
+            enabled = enabled,
+            readOnly = true,
+            label = { Text(text = "Interval unit") },
+            trailingIcon = {
+                Icon(
+                    icon,
+                    contentDescription = null,
+                    Modifier.clickable(enabled = enabled) { expanded = !expanded })
+            })
+
+        DropdownMenu(
+            expanded = expanded, onDismissRequest = { expanded = false },
+            modifier = Modifier.width(with(LocalDensity.current) { textFiledSize.width.toDp() })
+        ) {
+            list.forEach { timeUnit ->
+                DropdownMenuItem(onClick = {
+                    selectedItem = timeUnit
+                    viewModel.saveTimeUnit(timeUnit)
+                    expanded = false
+                    itemSelected(selectedItem)
+                }) {
+                    Text(text = timeUnit.toString())
+                }
             }
         }
     }
