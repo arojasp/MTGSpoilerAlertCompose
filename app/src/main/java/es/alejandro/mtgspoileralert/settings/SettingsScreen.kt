@@ -144,8 +144,6 @@ fun DropDown(
     }
 
     Column {
-
-
         OutlinedTextField(value = selectedItem.toString(),
             onValueChange = {
                 val timeUnit = TimeUnit.valueOf(it)
