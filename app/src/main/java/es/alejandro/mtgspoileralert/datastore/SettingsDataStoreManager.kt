@@ -1,7 +1,10 @@
 package es.alejandro.mtgspoileralert.datastore
 
 import android.content.Context
-import androidx.datastore.preferences.core.*
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.longPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import es.alejandro.mtgspoileralert.settings.model.Settings
@@ -16,7 +19,7 @@ class SettingsDataStoreManager @Inject constructor(@ApplicationContext appContex
 
     companion object {
         val CORE_LISTEN = booleanPreferencesKey("core_listen")
-        val INTERVAL = intPreferencesKey("interval")
+        val INTERVAL = longPreferencesKey("interval")
         val TIME_UNIT = stringPreferencesKey("time_unit")
     }
 
@@ -36,7 +39,7 @@ class SettingsDataStoreManager @Inject constructor(@ApplicationContext appContex
         }
     }
 
-    suspend fun setTimeInterval(interval: Int) {
+    suspend fun setTimeInterval(interval: Long) {
         settingsDataStore.edit { settingsDataStore ->
             settingsDataStore[INTERVAL] = interval
         }
@@ -56,11 +59,5 @@ class SettingsDataStoreManager @Inject constructor(@ApplicationContext appContex
                 TimeUnit.valueOf(settingsPreferences[TIME_UNIT] ?: TimeUnit.MINUTES.toString())
             )
         )
-
     }
-
-
-
-
-
 }

@@ -1,23 +1,21 @@
 package es.alejandro.mtgspoileralert
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,27 +24,24 @@ import es.alejandro.mtgspoileralert.cards.CardsScreen
 import es.alejandro.mtgspoileralert.detail.CardDetailScreen
 import es.alejandro.mtgspoileralert.sets.SetsScreen
 import es.alejandro.mtgspoileralert.settings.SettingsScreen
+import es.alejandro.mtgspoileralert.settings.model.Settings
 import es.alejandro.mtgspoileralert.ui.theme.MTGSpoilerAlertTheme
-import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val request = PeriodicWorkRequestBuilder<CallWorker>(15, TimeUnit.MINUTES).build()
-        WorkManager.getInstance(applicationContext).enqueue(request)
-
         setContent {
             MTGSpoilerAlertTheme {
-                MTGApp()
+                MTGApp(applicationContext)
             }
         }
     }
 }
 
 @Composable
-fun MTGApp() {
+fun MTGApp(context: Context) {
 
     val navController = rememberNavController()
 
@@ -69,14 +64,24 @@ fun MTGApp() {
                     )
                 }
             ) {
-                SetsScreen { set ->
-                    navController.navigate("cards/${set}")
-                }
+                SetsScreen(
+                    onItemClick = { set ->
+                        navController.navigate("cards/$set")
+                    },
+                    preferencesAction = { settings ->
+                        setUpWorker(context, settings)
+                    }
+                )
             }
         }
-        composable("cards/{set}", arguments = listOf(navArgument("set") {
-            type = NavType.StringType
-        })) {
+        composable(
+            "cards/{set}",
+            arguments = listOf(
+                navArgument("set") {
+                    type = NavType.StringType
+                }
+            )
+        ) {
             val setString = remember {
                 it.arguments?.getString("set")
             }
@@ -96,7 +101,7 @@ fun MTGApp() {
                 }
             ) {
                 CardsScreen(set = setString) { cardId ->
-                    navController.navigate("card/${cardId}")
+                    navController.navigate("card/$cardId")
                 }
             }
         }
@@ -141,8 +146,28 @@ fun MTGApp() {
                     )
                 }
             ) {
-                SettingsScreen()
+                SettingsScreen {
+                    setUpWorker(context, it)
+                }
             }
         }
+    }
+}
+
+private fun setUpWorker(context: Context, settings: Settings) {
+    val request = PeriodicWorkRequestBuilder<CallWorker>(
+        settings.interval.first,
+        settings.interval.second
+    ).build()
+
+    WorkManager.getInstance(context).cancelUniqueWork("getSets")
+
+    if (settings.coreSetListen) {
+
+        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+            "getSets",
+            ExistingPeriodicWorkPolicy.KEEP,
+            request
+        )
     }
 }

@@ -10,10 +10,11 @@ import javax.inject.Inject
 interface ICardsRepository {
     suspend fun getCardsForSet(codeSet: String): CardsResponse
 }
+
 class CardsRepository @Inject constructor(
     val service: ICardsService,
     val dao: MTGSpoilerAlertDao
-): ICardsRepository{
+) : ICardsRepository {
     override suspend fun getCardsForSet(codeSet: String): CardsResponse {
         var pageNumber = 1
         val holdCardList = mutableListOf<Card>()
@@ -22,7 +23,7 @@ class CardsRepository @Inject constructor(
             var hold = service.getCardsForSet(code = codeSet, page = pageNumber)
             holdCardList.addAll(hold.data)
 
-            while (hold.has_more){
+            while (hold.has_more) {
                 pageNumber++
                 hold = service.getCardsForSet(code = codeSet, page = pageNumber)
                 holdCardList.addAll(hold.data)

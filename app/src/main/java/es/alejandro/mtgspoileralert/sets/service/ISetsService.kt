@@ -7,5 +7,4 @@ interface ISetsService {
 
     @GET("sets")
     suspend fun getAllSets(): SetsResponse
-
 }

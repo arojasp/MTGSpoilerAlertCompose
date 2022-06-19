@@ -5,7 +5,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import es.alejandro.mtgspoileralert.R
 
@@ -13,6 +12,7 @@ val fonts = FontFamily(
     Font(R.font.montserrat_regular),
     Font(R.font.montserrat_semibold, weight = FontWeight.SemiBold)
 )
+
 // Set of Material typography styles to start with
 val Typography = Typography(
     h1 = TextStyle(

@@ -1,6 +1,5 @@
 package es.alejandro.mtgspoileralert.detail.usecase
 
-import es.alejandro.mtgspoileralert.cards.model.CardsResponse
 import es.alejandro.mtgspoileralert.detail.model.CardResponse
 import es.alejandro.mtgspoileralert.detail.repository.ICardDetailRepository
 import javax.inject.Inject
@@ -10,8 +9,8 @@ interface IGetCardDetailUseCase {
 }
 
 class GetCardDetailUseCase @Inject constructor(
-        val repository: ICardDetailRepository
-): IGetCardDetailUseCase {
+    val repository: ICardDetailRepository
+) : IGetCardDetailUseCase {
     override suspend fun invoke(cardId: String): CardResponse {
         return repository.getCardDetail(cardId)
     }

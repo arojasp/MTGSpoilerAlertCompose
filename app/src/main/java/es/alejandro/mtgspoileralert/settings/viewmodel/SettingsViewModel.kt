@@ -2,7 +2,6 @@ package es.alejandro.mtgspoileralert.settings.viewmodel
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,6 +17,7 @@ sealed class ViewState {
     object Loading : ViewState()
     data class Success(val data: Settings) : ViewState()
     data class Error(val errorMessage: String) : ViewState()
+    data class SuccessChange(val data: Settings) : ViewState()
 }
 
 @HiltViewModel
@@ -44,7 +44,7 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun saveTimeInterval(interval: Int) {
+    fun saveTimeInterval(interval: Long) {
         viewModelScope.launch {
             dataStoreManager.setTimeInterval(interval)
         }
@@ -55,5 +55,4 @@ class SettingsViewModel @Inject constructor(
             dataStoreManager.setTimeUnit(timeUnit)
         }
     }
-
 }

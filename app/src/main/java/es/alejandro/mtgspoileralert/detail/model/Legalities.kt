@@ -1,7 +1,5 @@
 package es.alejandro.mtgspoileralert.detail.model
 
-import androidx.room.Entity
-
 data class Legalities(
     val alchemy: String,
     val brawl: String,

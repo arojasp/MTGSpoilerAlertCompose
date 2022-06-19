@@ -9,8 +9,8 @@ interface ICardDetailRepository {
 }
 
 class CardDetailRepository @Inject constructor(
-        val service: ICardDetailService
-): ICardDetailRepository {
+    val service: ICardDetailService
+) : ICardDetailRepository {
     override suspend fun getCardDetail(cardId: String): CardResponse {
         return service.getCardDetail(cardId)
     }

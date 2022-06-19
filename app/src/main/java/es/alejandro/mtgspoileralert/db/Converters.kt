@@ -2,12 +2,9 @@ package es.alejandro.mtgspoileralert.db
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
-
 import com.google.gson.reflect.TypeToken
 import es.alejandro.mtgspoileralert.cards.model.AllPart
 import es.alejandro.mtgspoileralert.detail.model.CardFace
-import es.alejandro.mtgspoileralert.sets.model.Set
-
 
 class Converters {
 
@@ -18,7 +15,8 @@ class Converters {
     fun cardFaceListToString(value: List<CardFace>?) = Gson().toJson(value)
 
     @TypeConverter
-    fun stringToCardFaceList(value: String) = Gson().fromJson(value, Array<CardFace>::class.java).toList()
+    fun stringToCardFaceList(value: String) =
+        Gson().fromJson(value, Array<CardFace>::class.java).toList()
 
     @TypeConverter
     fun stringListToString(list: List<String?>?): String? {
@@ -46,7 +44,7 @@ class Converters {
 
     @TypeConverter
     fun stringToAllPartList(value: String?): List<AllPart>? {
-        val listType = object: TypeToken<List<AllPart?>?>() {}.type
+        val listType = object : TypeToken<List<AllPart?>?>() {}.type
         return Gson().fromJson(value, listType)
     }
 }

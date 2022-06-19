@@ -1,13 +1,10 @@
 package es.alejandro.mtgspoileralert.di
 
-import androidx.work.Worker
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.scopes.ActivityScoped
 import dagger.hilt.components.SingletonComponent
-import es.alejandro.mtgspoileralert.backgroundservice.CallWorker
 import es.alejandro.mtgspoileralert.cards.repository.CardsRepository
 import es.alejandro.mtgspoileralert.cards.repository.ICardsRepository
 import es.alejandro.mtgspoileralert.cards.service.ICardsService
@@ -27,7 +24,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.scalars.ScalarsConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -94,7 +90,5 @@ class AppModule {
         @Binds
         @Singleton
         fun providesCardDetailUseCase(uc: GetCardDetailUseCase): IGetCardDetailUseCase
-
     }
-
 }

@@ -10,7 +10,7 @@ interface IGetSetUseCase {
 
 class GetSetsUseCase @Inject constructor(
     val repository: ISetsRepository
-): IGetSetUseCase {
+) : IGetSetUseCase {
 
     override suspend fun invoke(): SetsResponse {
         return repository.getAllSets()

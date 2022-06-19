@@ -7,7 +7,6 @@ import androidx.room.Query
 import es.alejandro.mtgspoileralert.cards.model.Card
 import es.alejandro.mtgspoileralert.detail.model.CardResponse
 import es.alejandro.mtgspoileralert.sets.model.Set
-import es.alejandro.mtgspoileralert.sets.model.SetsResponse
 
 @Dao
 interface MTGSpoilerAlertDao {

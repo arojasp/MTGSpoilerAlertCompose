@@ -9,16 +9,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
-import es.alejandro.mtgspoileralert.datastore.SettingsDataStoreManager
 import es.alejandro.mtgspoileralert.settings.model.Settings
 import es.alejandro.mtgspoileralert.settings.viewmodel.SettingsViewModel
 import es.alejandro.mtgspoileralert.settings.viewmodel.ViewState
@@ -26,7 +23,8 @@ import java.util.concurrent.TimeUnit
 
 @Composable
 fun SettingsScreen(
-    viewModel: SettingsViewModel = hiltViewModel()
+    viewModel: SettingsViewModel = hiltViewModel(),
+    preferencesAction: (Settings) -> Unit
 ) {
 
     val viewState by remember { viewModel.viewState }
@@ -34,15 +32,16 @@ fun SettingsScreen(
     when (val state = viewState) {
         is ViewState.Success -> {
             SettingsSetupScreen(viewModel = viewModel, settings = state.data)
+            preferencesAction(state.data)
+        }
+        is ViewState.SuccessChange -> {
+            preferencesAction(state.data)
         }
         is ViewState.Error -> {
-
         }
         is ViewState.Loading -> {
-
         }
     }
-
 }
 
 @Composable
@@ -66,13 +65,17 @@ fun SettingsSetupScreen(viewModel: SettingsViewModel, settings: Settings) {
                         coreCheckedState
 
                     viewModel.saveCoreListen(it)
-                })
+                }
+            )
         }
 
         Spacer(modifier = Modifier.size(30.dp))
 
         var minRangeValue by remember {
-            mutableStateOf(1f)
+            if (settings.interval.second == TimeUnit.MINUTES)
+                mutableStateOf(15f)
+            else
+                mutableStateOf(1f)
         }
 
         var periodInterval by remember {
@@ -92,7 +95,7 @@ fun SettingsSetupScreen(viewModel: SettingsViewModel, settings: Settings) {
             value = periodInterval,
             onValueChange = {
                 periodInterval = it
-                viewModel.saveTimeInterval(it.toInt())
+                viewModel.saveTimeInterval(it.toLong())
             },
             valueRange = minRangeValue..maxRangeValue,
             enabled = enabledElements,
@@ -107,7 +110,6 @@ fun SettingsSetupScreen(viewModel: SettingsViewModel, settings: Settings) {
             Text(style = MaterialTheme.typography.h1, text = "${periodInterval.toInt()}")
             Text(text = "${maxRangeValue.toInt()}")
         }
-
     }
 }
 
@@ -144,7 +146,8 @@ fun DropDown(
     }
 
     Column {
-        OutlinedTextField(value = selectedItem.toString(),
+        OutlinedTextField(
+            value = selectedItem.toString(),
             onValueChange = {
                 val timeUnit = TimeUnit.valueOf(it)
                 selectedItem = timeUnit
@@ -163,8 +166,10 @@ fun DropDown(
                 Icon(
                     icon,
                     contentDescription = null,
-                    Modifier.clickable(enabled = enabled) { expanded = !expanded })
-            })
+                    Modifier.clickable(enabled = enabled) { expanded = !expanded }
+                )
+            }
+        )
 
         DropdownMenu(
             expanded = expanded, onDismissRequest = { expanded = false },
