@@ -12,6 +12,6 @@ class GetCardsUseCase @Inject constructor(
     val repository: ICardsRepository
 ) : IGetCardsUseCase {
     override suspend fun invoke(setCode: String): CardsResponse {
-        return repository.getCardsForSet("e:$setCode")
+        return repository.getCardsForSet(setCode)
     }
 }

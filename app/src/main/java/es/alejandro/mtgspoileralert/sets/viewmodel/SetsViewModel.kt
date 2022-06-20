@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import es.alejandro.mtgspoileralert.datastore.SetsDataStoreManager
 import es.alejandro.mtgspoileralert.datastore.SettingsDataStoreManager
 import es.alejandro.mtgspoileralert.sets.model.Set
 import es.alejandro.mtgspoileralert.sets.usecase.IGetSetUseCase
@@ -30,7 +31,8 @@ sealed class ActionState {
 @HiltViewModel
 class SetsViewModel @Inject constructor(
     useCase: IGetSetUseCase,
-    val dataStoreManager: SettingsDataStoreManager
+    val dataStoreManager: SettingsDataStoreManager,
+    val setsStoreManager: SetsDataStoreManager
 ) : ViewModel() {
 
     private val _viewState: MutableState<ViewState> = mutableStateOf(
@@ -53,6 +55,7 @@ class SetsViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val sets = useCase()
+                setsStoreManager.setLastSet(sets.data.first().code)
                 _viewState.value = ViewState.Success(sets.data)
             } catch (e: Exception) {
                 Log.d("MTGSA", "Exception ${e.message}")

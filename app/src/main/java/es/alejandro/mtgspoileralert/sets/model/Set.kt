@@ -13,7 +13,7 @@ data class Set(
     val digital: Boolean?,
     val foil_only: Boolean?,
     val icon_svg_uri: String,
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = false)
     val id: String,
     val mtgo_code: String?,
     val name: String,

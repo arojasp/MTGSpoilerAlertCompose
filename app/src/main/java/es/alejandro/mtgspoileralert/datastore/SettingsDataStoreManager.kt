@@ -34,8 +34,8 @@ class SettingsDataStoreManager @Inject constructor(@ApplicationContext appContex
     }
 
     suspend fun setCoreListening(isListening: Boolean) {
-        settingsDataStore.edit { settings ->
-            settings[CORE_LISTEN] = isListening
+        settingsDataStore.edit { settingsDataStore ->
+            settingsDataStore[CORE_LISTEN] = isListening
         }
     }
 

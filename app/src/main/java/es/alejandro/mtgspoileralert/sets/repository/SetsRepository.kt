@@ -1,6 +1,7 @@
 package es.alejandro.mtgspoileralert.sets.repository
 
 import es.alejandro.mtgspoileralert.db.MTGSpoilerAlertDao
+import es.alejandro.mtgspoileralert.notification.NotificationService
 import es.alejandro.mtgspoileralert.sets.model.SetType
 import es.alejandro.mtgspoileralert.sets.model.SetsResponse
 import es.alejandro.mtgspoileralert.sets.service.ISetsService
@@ -25,7 +26,6 @@ class SetsRepository @Inject constructor(
                     (it.set_type == SetType.EXPANSION || it.set_type == SetType.CORE || it.set_type == SetType.COMMANDER) && it.card_count > 0
                 }
                 val properResponse = hold.copy(data = newList)
-                dao.saveSets(properResponse.data)
                 properResponse
             } catch (e: Exception) {
                 SetsResponse(dao.getAllSets(), false, "")

@@ -1,9 +1,11 @@
 package es.alejandro.mtgspoileralert.di
 
+import android.content.Context
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import es.alejandro.mtgspoileralert.cards.repository.CardsRepository
 import es.alejandro.mtgspoileralert.cards.repository.ICardsRepository
@@ -15,6 +17,7 @@ import es.alejandro.mtgspoileralert.detail.repository.ICardDetailRepository
 import es.alejandro.mtgspoileralert.detail.service.ICardDetailService
 import es.alejandro.mtgspoileralert.detail.usecase.GetCardDetailUseCase
 import es.alejandro.mtgspoileralert.detail.usecase.IGetCardDetailUseCase
+import es.alejandro.mtgspoileralert.notification.NotificationService
 import es.alejandro.mtgspoileralert.sets.repository.ISetsRepository
 import es.alejandro.mtgspoileralert.sets.repository.SetsRepository
 import es.alejandro.mtgspoileralert.sets.service.ISetsService
@@ -29,6 +32,12 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class AppModule {
+
+    @Provides
+    @Singleton
+    fun provideNotificationService(@ApplicationContext app: Context): NotificationService {
+        return NotificationService(app)
+    }
 
     @Provides
     @Singleton

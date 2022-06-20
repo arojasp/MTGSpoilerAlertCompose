@@ -1,6 +1,9 @@
 package es.alejandro.mtgspoileralert
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,6 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import es.alejandro.mtgspoileralert.backgroundservice.CallWorker
 import es.alejandro.mtgspoileralert.cards.CardsScreen
 import es.alejandro.mtgspoileralert.detail.CardDetailScreen
+import es.alejandro.mtgspoileralert.notification.NotificationService.Companion.CHANNEL_ID
 import es.alejandro.mtgspoileralert.sets.SetsScreen
 import es.alejandro.mtgspoileralert.settings.SettingsScreen
 import es.alejandro.mtgspoileralert.settings.model.Settings
@@ -31,6 +35,8 @@ import es.alejandro.mtgspoileralert.ui.theme.MTGSpoilerAlertTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        createNotificationChannel(applicationContext)
 
         setContent {
             MTGSpoilerAlertTheme {
@@ -169,5 +175,18 @@ private fun setUpWorker(context: Context, settings: Settings) {
             ExistingPeriodicWorkPolicy.KEEP,
             request
         )
+    }
+}
+
+fun createNotificationChannel(context: Context) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val name = "MTGSpoilerAlert"
+        val desc = "New sets alerts"
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+            description = desc
+        }
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 }
