@@ -12,6 +12,7 @@ import es.alejandro.mtgspoileralert.cards.repository.ICardsRepository
 import es.alejandro.mtgspoileralert.cards.service.ICardsService
 import es.alejandro.mtgspoileralert.cards.usecase.GetCardsUseCase
 import es.alejandro.mtgspoileralert.cards.usecase.IGetCardsUseCase
+import es.alejandro.mtgspoileralert.datastore.SetsDataStoreManager
 import es.alejandro.mtgspoileralert.detail.repository.CardDetailRepository
 import es.alejandro.mtgspoileralert.detail.repository.ICardDetailRepository
 import es.alejandro.mtgspoileralert.detail.service.ICardDetailService
@@ -35,8 +36,8 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideNotificationService(@ApplicationContext app: Context): NotificationService {
-        return NotificationService(app)
+    fun provideNotificationService(@ApplicationContext app: Context, setsDataStoreManager: SetsDataStoreManager): NotificationService {
+        return NotificationService(app, setsDataStoreManager)
     }
 
     @Provides
