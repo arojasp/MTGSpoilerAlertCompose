@@ -29,7 +29,7 @@ data class CardResponse(
     val id: String,
     val illustration_id: String?,
     val image_status: String,
-    @Embedded val image_uris: ImageUris,
+    @Embedded val image_uris: ImageUris?,
     val keywords: List<String>,
     val lang: String,
     val layout: String,

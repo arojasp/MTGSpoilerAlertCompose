@@ -1,7 +1,10 @@
 package es.alejandro.mtgspoileralert.db
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
 import androidx.room.OnConflictStrategy.IGNORE
+import androidx.room.Query
+import androidx.room.Transaction
 import es.alejandro.mtgspoileralert.cards.model.Card
 import es.alejandro.mtgspoileralert.detail.model.CardResponse
 import es.alejandro.mtgspoileralert.sets.model.Set

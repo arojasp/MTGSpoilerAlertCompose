@@ -175,7 +175,6 @@ private fun setUpWorker(context: Context, settings: Settings) {
     WorkManager.getInstance(context).cancelUniqueWork("getSets")
 
     if (settings.coreSetListen) {
-
         WorkManager.getInstance(context).enqueueUniquePeriodicWork(
             "getSets",
             ExistingPeriodicWorkPolicy.KEEP,

@@ -1,7 +1,6 @@
 package es.alejandro.mtgspoileralert.cards
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
@@ -14,13 +13,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
-import coil.size.OriginalSize
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import es.alejandro.mtgspoileralert.cards.model.Card
 import es.alejandro.mtgspoileralert.cards.viewmodel.CardsViewModel
 import es.alejandro.mtgspoileralert.cards.viewmodel.ViewState
@@ -73,7 +72,7 @@ fun CardsList(cards: List<Card>, onCardClick: (String) -> Unit) {
     }
 }
 
-@OptIn(ExperimentalCoilApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SingleCardItem(
     card: Card,
@@ -82,7 +81,7 @@ fun SingleCardItem(
 
     var showDialog by remember { mutableStateOf(false) }
     if (showDialog) {
-        DialogCard(card.image_uris.normal) {
+        DialogCard(card.image_uris?.normal) {
             showDialog = false
         }
     }
@@ -97,26 +96,26 @@ fun SingleCardItem(
             ),
         elevation = 8.dp
     ) {
-        Image(
+        AsyncImage(
             modifier = Modifier.fillMaxSize(),
-            painter = rememberImagePainter(
-                card.image_uris.normal,
-                builder = {
-                    size(OriginalSize)
-                }
-            ),
-            contentDescription = null, contentScale = ContentScale.Crop
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(card.image_uris?.normal).build(),
+            contentDescription = null,
+            contentScale = ContentScale.Crop
         )
     }
 }
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
-fun DialogCard(imageUri: String, onClose: () -> Unit) {
+fun DialogCard(imageUri: String?, onClose: () -> Unit) {
     Dialog(
         onDismissRequest = onClose,
         DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true)
     ) {
-        Image(painter = rememberImagePainter(data = imageUri), contentDescription = null)
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(imageUri).build(),
+            contentDescription = null
+        )
     }
 }

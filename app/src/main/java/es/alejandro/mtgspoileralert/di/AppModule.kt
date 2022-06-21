@@ -26,8 +26,10 @@ import es.alejandro.mtgspoileralert.sets.usecase.GetSetsUseCase
 import es.alejandro.mtgspoileralert.sets.usecase.IGetSetUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -36,16 +38,31 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideNotificationService(@ApplicationContext app: Context, setsDataStoreManager: SetsDataStoreManager): NotificationService {
+    fun provideNotificationService(
+        @ApplicationContext app: Context,
+        setsDataStoreManager: SetsDataStoreManager
+    ): NotificationService {
         return NotificationService(app, setsDataStoreManager)
     }
 
     @Provides
     @Singleton
-    fun provideRetrofit(): Retrofit {
+    fun provideRetrofit(okhttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://api.scryfall.com/")
             .addConverterFactory(GsonConverterFactory.create())
+            .client(okhttpClient)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideOkhttpClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+            .callTimeout(2, TimeUnit.MINUTES)
+            .connectTimeout(20, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
             .build()
     }
 

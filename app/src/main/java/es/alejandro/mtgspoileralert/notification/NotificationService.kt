@@ -4,10 +4,10 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.TaskStackBuilder
-import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import es.alejandro.mtgspoileralert.MainActivity
 import es.alejandro.mtgspoileralert.R
@@ -35,7 +35,11 @@ class NotificationService(
         )
         val pending = TaskStackBuilder.create(context).run {
             addNextIntentWithParentStack(cardsIntent)
-            getPendingIntent(1, PendingIntent.FLAG_UPDATE_CURRENT)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                getPendingIntent(1, PendingIntent.FLAG_MUTABLE)
+            } else {
+                getPendingIntent(1, PendingIntent.FLAG_UPDATE_CURRENT)
+            }
         }
 
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)

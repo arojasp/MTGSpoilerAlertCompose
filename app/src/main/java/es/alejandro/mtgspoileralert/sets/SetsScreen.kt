@@ -1,6 +1,5 @@
 package es.alejandro.mtgspoileralert.sets
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,9 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
+import coil.compose.AsyncImage
 import coil.decode.SvgDecoder
+import coil.request.ImageRequest
 import es.alejandro.mtgspoileralert.sets.model.Set
 import es.alejandro.mtgspoileralert.sets.viewmodel.ActionState
 import es.alejandro.mtgspoileralert.sets.viewmodel.SetsViewModel
@@ -68,7 +67,6 @@ fun SetsScreen(
     }
 }
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun SingleSetItem(
     set: Set,
@@ -82,16 +80,14 @@ fun SingleSetItem(
         elevation = 8.dp
     ) {
         Row(modifier = Modifier.padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
-            Image(
+            AsyncImage(
                 modifier = Modifier
                     .size(60.dp)
                     .padding(8.dp),
-                painter = rememberImagePainter(
-                    data = set.icon_svg_uri,
-                    builder = {
-                        decoder(SvgDecoder(LocalContext.current))
-                    }
-                ),
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(set.icon_svg_uri)
+                    .decoderFactory(SvgDecoder.Factory())
+                    .build(),
                 contentDescription = null
             )
             Column {

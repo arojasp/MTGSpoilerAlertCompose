@@ -12,7 +12,6 @@ import es.alejandro.mtgspoileralert.datastore.SettingsDataStoreManager
 import es.alejandro.mtgspoileralert.sets.model.Set
 import es.alejandro.mtgspoileralert.sets.usecase.IGetSetUseCase
 import es.alejandro.mtgspoileralert.settings.model.Settings
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

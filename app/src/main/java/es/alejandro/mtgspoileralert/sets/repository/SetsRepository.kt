@@ -1,7 +1,6 @@
 package es.alejandro.mtgspoileralert.sets.repository
 
 import es.alejandro.mtgspoileralert.db.MTGSpoilerAlertDao
-import es.alejandro.mtgspoileralert.notification.NotificationService
 import es.alejandro.mtgspoileralert.sets.model.SetType
 import es.alejandro.mtgspoileralert.sets.model.SetsResponse
 import es.alejandro.mtgspoileralert.sets.service.ISetsService

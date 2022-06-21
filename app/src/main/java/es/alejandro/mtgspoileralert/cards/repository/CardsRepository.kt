@@ -5,9 +5,9 @@ import es.alejandro.mtgspoileralert.cards.model.Card
 import es.alejandro.mtgspoileralert.cards.model.CardsResponse
 import es.alejandro.mtgspoileralert.cards.service.ICardsService
 import es.alejandro.mtgspoileralert.datastore.SetsDataStoreManager
-import es.alejandro.mtgspoileralert.datastore.SettingsDataStoreManager
 import es.alejandro.mtgspoileralert.db.MTGSpoilerAlertDao
 import es.alejandro.mtgspoileralert.notification.NotificationService
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 interface ICardsRepository {
@@ -17,33 +17,34 @@ interface ICardsRepository {
 class CardsRepository @Inject constructor(
     val service: ICardsService,
     val dao: MTGSpoilerAlertDao,
-    val notificationService: NotificationService
+    val notificationService: NotificationService,
+    val setsDataStoreManager: SetsDataStoreManager
 ) : ICardsRepository {
     override suspend fun getCardsForSet(set: String): CardsResponse {
         var pageNumber = 1
         val holdCardList = mutableListOf<Card>()
-        val codeSet = "e:$set"
-        var response: CardsResponse = try {
-            var hold = service.getCardsForSet(code = codeSet, page = pageNumber)
+        val searchCodeSet = "e:$set"
+        val response: CardsResponse = try {
+            var hold = service.getCardsForSet(code = searchCodeSet, page = pageNumber)
             holdCardList.addAll(hold.data)
 
             while (hold.has_more) {
                 pageNumber++
-                hold = service.getCardsForSet(code = codeSet, page = pageNumber)
+                hold = service.getCardsForSet(code = searchCodeSet, page = pageNumber)
                 holdCardList.addAll(hold.data)
             }
             val properResponse = hold.copy(data = holdCardList)
 
             val thereAreNewItems = dao.insertNewCards(set, properResponse.data)
-            if (thereAreNewItems) {
+            if (thereAreNewItems && set == setsDataStoreManager.sets.first()) {
                 notificationService.showNewSetsNotification()
             }
 
             dao.saveCards(holdCardList)
             properResponse
         } catch (e: Exception) {
-            Log.d("TAG", "${e.message}")
-            val storedCards = dao.getCardsForSet(codeSet)
+            Log.e("TAG", "${e.message}")
+            val storedCards = dao.getCardsForSet(searchCodeSet)
             CardsResponse(storedCards, false, "", "", storedCards.size)
         }
 
