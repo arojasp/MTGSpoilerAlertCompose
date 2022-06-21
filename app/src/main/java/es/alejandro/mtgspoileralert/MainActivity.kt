@@ -18,6 +18,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -50,7 +51,7 @@ class MainActivity : ComponentActivity() {
 fun MTGApp(context: Context) {
 
     val navController = rememberNavController()
-
+    val uri = "https://mtgsac.com"
     NavHost(navController = navController, startDestination = "sets") {
         composable("sets") {
             Scaffold(
@@ -85,6 +86,11 @@ fun MTGApp(context: Context) {
             arguments = listOf(
                 navArgument("set") {
                     type = NavType.StringType
+                }
+            ),
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = "$uri/set={set}"
                 }
             )
         ) {
@@ -186,7 +192,8 @@ fun createNotificationChannel(context: Context) {
         val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
             description = desc
         }
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
     }
 }

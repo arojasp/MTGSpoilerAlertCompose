@@ -35,7 +35,7 @@ class CardsRepository @Inject constructor(
             val properResponse = hold.copy(data = holdCardList)
 
             val thereAreNewItems = dao.insertNewCards(set, properResponse.data)
-            if (true) {
+            if (thereAreNewItems) {
                 notificationService.showNewSetsNotification()
             }
 
