@@ -113,6 +113,7 @@ fun DialogCard(imageUri: String?, onClose: () -> Unit) {
         DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true)
     ) {
         AsyncImage(
+            modifier = Modifier.fillMaxWidth(),
             model = ImageRequest.Builder(LocalContext.current)
                 .data(imageUri).build(),
             contentDescription = null
