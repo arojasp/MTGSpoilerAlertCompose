@@ -7,15 +7,17 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 
 private val DarkColorPalette = darkColors(
-    primary = Purple200,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    primary = Indigo300,
+    primaryVariant = Indigo300Dark,
+    secondary = DeepPurple300,
+    secondaryVariant = DeepPurple300Dark
 )
 
 private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    primary = Indigo300,
+    primaryVariant = Indigo300Dark,
+    secondary = DeepPurple300,
+    secondaryVariant = DeepPurple300Dark
 
     /* Other default colors to override
     background = Color.White,
@@ -32,11 +34,7 @@ fun MTGSpoilerAlertTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val colors = if (darkTheme) {
-        DarkColorPalette
-    } else {
-        LightColorPalette
-    }
+    val colors = LightColorPalette
 
     MaterialTheme(
         colors = colors,
