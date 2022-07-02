@@ -19,6 +19,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import es.alejandro.mtgspoileralert.sets.model.Set
 import es.alejandro.mtgspoileralert.sets.viewmodel.ActionState
 import es.alejandro.mtgspoileralert.sets.viewmodel.SetsViewModel
@@ -34,10 +36,13 @@ fun SetsScreen(
 
     val viewState by remember { viewModel.viewState }
     val actionState by remember { viewModel.actionState }
+    val isRefreshing by remember { viewModel.isRefreshing }
 
     when (val state = viewState) {
         is ViewState.Success -> {
-            Column {
+            SwipeRefresh(
+                state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
+                onRefresh = { viewModel.refresh() }) {
                 LazyColumn {
                     items(state.data) { item ->
                         SingleSetItem(set = item) {
@@ -59,10 +64,16 @@ fun SetsScreen(
                 CircularProgressIndicator(modifier = Modifier.size(100.dp))
             }
         }
+        else -> {
+            // ignore
+        }
     }
     when (val state = actionState) {
         is ActionState.PreferencesAction -> {
             preferencesAction(state.data)
+        }
+        else -> {
+            // ignore
         }
     }
 }

@@ -26,7 +26,11 @@ class CardsViewModel @Inject constructor(
     private val _viewState: MutableState<ViewState> = mutableStateOf(ViewState.Loading)
     val viewState: State<ViewState> = _viewState
 
+    val isRefreshing = mutableStateOf(false)
+
     fun getCardsForSet(setCode: String) {
+
+        isRefreshing.value = true
         viewModelScope.launch {
             try {
                 val cardsResponse = useCase(setCode)
@@ -34,6 +38,8 @@ class CardsViewModel @Inject constructor(
             } catch (e: Exception) {
                 Log.d("MTGSA", "Exception ${e.message}")
                 _viewState.value = ViewState.Error(e.message ?: "Unknown error")
+            } finally {
+                isRefreshing.value = false
             }
         }
     }
