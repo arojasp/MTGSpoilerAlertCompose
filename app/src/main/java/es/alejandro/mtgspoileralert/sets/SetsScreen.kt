@@ -20,6 +20,7 @@ import coil.compose.AsyncImage
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import es.alejandro.mtgspoileralert.sets.model.Set
 import es.alejandro.mtgspoileralert.sets.viewmodel.ActionState
@@ -42,7 +43,15 @@ fun SetsScreen(
         is ViewState.Success -> {
             SwipeRefresh(
                 state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
-                onRefresh = { viewModel.refresh() }) {
+                onRefresh = { viewModel.refresh() },
+                indicator = { state, trigger ->
+                    SwipeRefreshIndicator(
+                        state = state,
+                        refreshTriggerDistance = trigger,
+                        backgroundColor = MaterialTheme.colors.primary
+                    )
+                }
+            ) {
                 LazyColumn {
                     items(state.data) { item ->
                         SingleSetItem(set = item) {
