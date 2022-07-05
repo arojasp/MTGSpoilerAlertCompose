@@ -29,11 +29,27 @@ sealed class ActionState {
 
 @HiltViewModel
 class SetsViewModel @Inject constructor(
-    useCase: IGetSetUseCase,
+    val useCase: IGetSetUseCase,
     val dataStoreManager: SettingsDataStoreManager,
     val setsStoreManager: SetsDataStoreManager
 ) : ViewModel() {
 
+    fun refresh() {
+        isRefreshing.value = true
+        viewModelScope.launch {
+            try {
+                val sets = useCase()
+                setsStoreManager.setLastSet(sets.data.first().code)
+                _viewState.value = ViewState.Success(sets.data)
+            } catch (e: Exception) {
+                Log.d("MTGSA", "Exception ${e.message}")
+                _viewState.value = ViewState.Error(e.message ?: "Unknown error")
+            } finally {
+                isRefreshing.value = false
+            }
+        }    }
+
+    val isRefreshing = mutableStateOf(false)
     private val _viewState: MutableState<ViewState> = mutableStateOf(
         ViewState.Loading
     )
@@ -50,16 +66,6 @@ class SetsViewModel @Inject constructor(
                 _actionState.value = ActionState.PreferencesAction(it)
             }
         }
-
-        viewModelScope.launch {
-            try {
-                val sets = useCase()
-                setsStoreManager.setLastSet(sets.data.first().code)
-                _viewState.value = ViewState.Success(sets.data)
-            } catch (e: Exception) {
-                Log.d("MTGSA", "Exception ${e.message}")
-                _viewState.value = ViewState.Error(e.message ?: "Unknown error")
-            }
-        }
+        refresh()
     }
 }

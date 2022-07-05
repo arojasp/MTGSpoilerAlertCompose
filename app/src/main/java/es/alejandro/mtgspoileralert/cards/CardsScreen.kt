@@ -3,11 +3,12 @@ package es.alejandro.mtgspoileralert.cards
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,6 +21,9 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import es.alejandro.mtgspoileralert.cards.model.Card
 import es.alejandro.mtgspoileralert.cards.viewmodel.CardsViewModel
 import es.alejandro.mtgspoileralert.cards.viewmodel.ViewState
@@ -38,11 +42,25 @@ fun CardsScreen(
     }
 
     val viewState by remember { viewModel.viewState }
+    val isRefreshing by remember { viewModel.isRefreshing }
 
     when (val state = viewState) {
         is ViewState.Success -> {
-            CardsList(state.data) { cardId ->
-                onCardClick(cardId)
+            SwipeRefresh(
+                state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
+                onRefresh = {
+                    if (!set.isNullOrBlank())
+                        viewModel.getCardsForSet(set)
+                }, indicator = { state, trigger ->
+                    SwipeRefreshIndicator(
+                        state = state,
+                        refreshTriggerDistance = trigger,
+                        backgroundColor = MaterialTheme.colors.primary
+                    )
+                }) {
+                CardsList(state.data) { cardId ->
+                    onCardClick(cardId)
+                }
             }
         }
         is ViewState.Error -> {
@@ -60,10 +78,9 @@ fun CardsScreen(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CardsList(cards: List<Card>, onCardClick: (String) -> Unit) {
-    LazyVerticalGrid(cells = GridCells.Fixed(2)) {
+    LazyVerticalGrid(GridCells.Fixed(2)) {
         items(cards) { item ->
             SingleCardItem(item) { cardId ->
                 onCardClick(cardId)

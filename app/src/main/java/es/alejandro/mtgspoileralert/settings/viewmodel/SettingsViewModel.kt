@@ -11,6 +11,7 @@ import es.alejandro.mtgspoileralert.settings.model.Settings
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlinx.coroutines.flow.collect
 
 sealed class ViewState {
     object Loading : ViewState()
