@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "917965944414",
+    "project_id": "mtg-spoiler-alert-46574",
+    "storage_bucket": "mtg-spoiler-alert-46574.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:917965944414:android:b0009dfe5053d0f94de6cf",
+        "android_client_info": {
+          "package_name": "es.alejandro.mtgspoileralert"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "917965944414-5n7sa023qc4jrvfmd7p0d9801dbb7ecg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIUXA4kw0cCHy-d3MbW9C9-fx6ilYvqeM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "917965944414-5n7sa023qc4jrvfmd7p0d9801dbb7ecg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
