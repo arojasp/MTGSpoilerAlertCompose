@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
+import es.alejandro.mtgspoileralert.BuildConfig
 import es.alejandro.mtgspoileralert.settings.model.Settings
 import es.alejandro.mtgspoileralert.settings.viewmodel.SettingsViewModel
 import es.alejandro.mtgspoileralert.settings.viewmodel.ViewState
@@ -54,63 +55,72 @@ fun SettingsSetupScreen(viewModel: SettingsViewModel, settings: Settings) {
         )
     }
 
-    Column(modifier = Modifier.padding(16.dp)) {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text(text = "Listen to new cards")
-            Switch(
-                checked = coreCheckedState,
-                onCheckedChange = {
-                    coreCheckedState = it
-                    enabledElements =
-                        coreCheckedState
+    Column(modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.SpaceBetween) {
+        Column(modifier = Modifier
+            .padding(16.dp)) {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text(text = "Listen to new cards")
+                Switch(
+                    checked = coreCheckedState,
+                    onCheckedChange = {
+                        coreCheckedState = it
+                        enabledElements =
+                            coreCheckedState
 
-                    viewModel.saveCoreListen(it)
-                }
+                        viewModel.saveCoreListen(it)
+                    }
+                )
+            }
+
+            Spacer(modifier = Modifier.size(30.dp))
+
+            var minRangeValue by remember {
+                if (settings.interval.second == TimeUnit.MINUTES)
+                    mutableStateOf(15f)
+                else
+                    mutableStateOf(1f)
+            }
+
+            var periodInterval by remember {
+                mutableStateOf(settings.interval.first.toFloat())
+            }
+
+            DropDown(enabledElements, viewModel, settings) { timeUnitSelected ->
+                if (timeUnitSelected == TimeUnit.MINUTES) {
+                    minRangeValue = 15f
+                    if (periodInterval < 15) periodInterval = 15f
+                } else
+                    minRangeValue = 1f
+            }
+
+            val maxRangeValue = 60f
+            Slider(
+                value = periodInterval,
+                onValueChange = {
+                    periodInterval = it
+                    viewModel.saveTimeInterval(it.toLong())
+                },
+                valueRange = minRangeValue..maxRangeValue,
+                enabled = enabledElements,
+                steps = 99
             )
+            Spacer(modifier = Modifier.size(15.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(text = "${minRangeValue.toInt()}")
+                Text(style = MaterialTheme.typography.h1, text = "${periodInterval.toInt()}")
+                Text(text = "${maxRangeValue.toInt()}")
+            }
+
         }
 
-        Spacer(modifier = Modifier.size(30.dp))
-
-        var minRangeValue by remember {
-            if (settings.interval.second == TimeUnit.MINUTES)
-                mutableStateOf(15f)
-            else
-                mutableStateOf(1f)
-        }
-
-        var periodInterval by remember {
-            mutableStateOf(settings.interval.first.toFloat())
-        }
-
-        DropDown(enabledElements, viewModel, settings) { timeUnitSelected ->
-            if (timeUnitSelected == TimeUnit.MINUTES) {
-                minRangeValue = 15f
-                if (periodInterval < 15) periodInterval = 15f
-            } else
-                minRangeValue = 1f
-        }
-
-        val maxRangeValue = 60f
-        Slider(
-            value = periodInterval,
-            onValueChange = {
-                periodInterval = it
-                viewModel.saveTimeInterval(it.toLong())
-            },
-            valueRange = minRangeValue..maxRangeValue,
-            enabled = enabledElements,
-            steps = 99
-        )
-        Spacer(modifier = Modifier.size(15.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(text = "${minRangeValue.toInt()}")
-            Text(style = MaterialTheme.typography.h1, text = "${periodInterval.toInt()}")
-            Text(text = "${maxRangeValue.toInt()}")
+        Row(modifier = Modifier.weight(1f, false).fillMaxWidth().padding(0.dp,0.dp,0.dp,16.dp), horizontalArrangement = Arrangement.Center) {
+            Text("Version ${BuildConfig.VERSION_NAME}")
         }
     }
+
 }
 
 @Composable
