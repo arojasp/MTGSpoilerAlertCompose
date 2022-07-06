@@ -10,14 +10,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import es.alejandro.mtgspoileralert.detail.model.CardResponse
 import es.alejandro.mtgspoileralert.detail.viewmodel.CardDetailViewModel
 import es.alejandro.mtgspoileralert.detail.viewmodel.ViewState
+import es.alejandro.mtgspoileralert.R
 
 @Composable
 fun CardDetailScreen(
+    paddingValues: PaddingValues,
     viewModel: CardDetailViewModel = hiltViewModel(),
     cardId: String?
 ) {
@@ -32,14 +35,14 @@ fun CardDetailScreen(
 
     when (val state = viewState) {
         is ViewState.Success -> {
-            CardDetail(card = state.data)
+            CardDetail(paddingValues, card = state.data)
         }
         is ViewState.Error -> {
-            Text(text = "Error ${state.errorMessage}")
+            Text(modifier = Modifier.padding(paddingValues), text = stringResource(id = R.string.error, state.errorMessage))
         }
         is ViewState.Loading -> {
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize().padding(paddingValues),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -50,9 +53,9 @@ fun CardDetailScreen(
 }
 
 @Composable
-fun CardDetail(card: CardResponse) {
+fun CardDetail(paddingValues: PaddingValues, card: CardResponse) {
     with(card) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(paddingValues).padding(16.dp)) {
 
             Row(
                 modifier = Modifier.fillMaxWidth(),

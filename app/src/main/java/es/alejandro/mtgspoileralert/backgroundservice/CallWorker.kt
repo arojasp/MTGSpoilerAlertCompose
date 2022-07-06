@@ -9,6 +9,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import es.alejandro.mtgspoileralert.cards.repository.ICardsRepository
 import es.alejandro.mtgspoileralert.datastore.SetsDataStoreManager
+import es.alejandro.mtgspoileralert.util.WorkerConstant
 import kotlinx.coroutines.flow.first
 
 @HiltWorker
@@ -21,11 +22,7 @@ class CallWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result {
         val result = repository.getCardsForSet(setsStoreManager.sets.first())
-        Log.d(TAG, "" + result)
+        Log.d(WorkerConstant.TAG, "" + result)
         return Result.success()
-    }
-
-    companion object {
-        const val TAG = "CallWorker"
     }
 }

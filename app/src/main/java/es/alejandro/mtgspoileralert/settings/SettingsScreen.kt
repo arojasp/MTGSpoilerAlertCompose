@@ -13,10 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import es.alejandro.mtgspoileralert.BuildConfig
+import es.alejandro.mtgspoileralert.R
 import es.alejandro.mtgspoileralert.settings.model.Settings
 import es.alejandro.mtgspoileralert.settings.viewmodel.SettingsViewModel
 import es.alejandro.mtgspoileralert.settings.viewmodel.ViewState
@@ -24,6 +26,7 @@ import java.util.concurrent.TimeUnit
 
 @Composable
 fun SettingsScreen(
+    paddingValues: PaddingValues,
     viewModel: SettingsViewModel = hiltViewModel(),
     preferencesAction: (Settings) -> Unit
 ) {
@@ -32,7 +35,7 @@ fun SettingsScreen(
 
     when (val state = viewState) {
         is ViewState.Success -> {
-            SettingsSetupScreen(viewModel = viewModel, settings = state.data)
+            SettingsSetupScreen(paddingValues, viewModel = viewModel, settings = state.data)
             preferencesAction(state.data)
         }
         is ViewState.SuccessChange -> {
@@ -46,7 +49,7 @@ fun SettingsScreen(
 }
 
 @Composable
-fun SettingsSetupScreen(viewModel: SettingsViewModel, settings: Settings) {
+fun SettingsSetupScreen(paddingValues: PaddingValues, viewModel: SettingsViewModel, settings: Settings) {
     var coreCheckedState by remember { mutableStateOf(settings.coreSetListen) }
 
     var enabledElements by remember {
@@ -55,11 +58,11 @@ fun SettingsSetupScreen(viewModel: SettingsViewModel, settings: Settings) {
         )
     }
 
-    Column(modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.SpaceBetween) {
+    Column(modifier = Modifier.fillMaxHeight().padding(paddingValues), verticalArrangement = Arrangement.SpaceBetween) {
         Column(modifier = Modifier
             .padding(16.dp)) {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text(text = "Listen to new cards")
+                Text(text = stringResource(id = R.string.settings_checkbox_title))
                 Switch(
                     checked = coreCheckedState,
                     onCheckedChange = {
@@ -116,8 +119,11 @@ fun SettingsSetupScreen(viewModel: SettingsViewModel, settings: Settings) {
 
         }
 
-        Row(modifier = Modifier.weight(1f, false).fillMaxWidth().padding(0.dp,0.dp,0.dp,16.dp), horizontalArrangement = Arrangement.Center) {
-            Text("Version ${BuildConfig.VERSION_NAME}")
+        Row(modifier = Modifier
+            .weight(1f, false)
+            .fillMaxWidth()
+            .padding(0.dp, 0.dp, 0.dp, 16.dp), horizontalArrangement = Arrangement.Center) {
+            Text(stringResource(id = R.string.settings_version, BuildConfig.VERSION_NAME))
         }
     }
 
@@ -171,7 +177,7 @@ fun DropDown(
                 },
             enabled = enabled,
             readOnly = true,
-            label = { Text(text = "Interval unit") },
+            label = { Text(text = stringResource(id = R.string.settings_interval_title)) },
             trailingIcon = {
                 Icon(
                     icon,
