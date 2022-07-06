@@ -8,19 +8,20 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import es.alejandro.mtgspoileralert.settings.model.Settings
+import es.alejandro.mtgspoileralert.util.PreferencesConstant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-private val Context.dataStore by preferencesDataStore("settings")
+private val Context.dataStore by preferencesDataStore(PreferencesConstant.Settings.SETTINGS_KEY)
 
 class SettingsDataStoreManager @Inject constructor(@ApplicationContext appContext: Context) {
 
     companion object {
-        val CORE_LISTEN = booleanPreferencesKey("core_listen")
-        val INTERVAL = longPreferencesKey("interval")
-        val TIME_UNIT = stringPreferencesKey("time_unit")
+        val CORE_LISTEN = booleanPreferencesKey(PreferencesConstant.Settings.CORE_LISTEN_KEY)
+        val INTERVAL = longPreferencesKey(PreferencesConstant.Settings.INTERVAL_KEY)
+        val TIME_UNIT = stringPreferencesKey(PreferencesConstant.Settings.TIME_UNIT_KEY)
     }
 
     private val settingsDataStore = appContext.dataStore

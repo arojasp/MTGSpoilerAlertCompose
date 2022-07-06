@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">MTG Spoiler Alert</string>
+
+    <!-- Settings -->
+    <string name="settings_checkbox_title">Listen to new cards</string>
+    <string name="settings_interval_title">Interval unit</string>
+    <string name="settings_version">Version %s</string>
+
+    <!-- Main Activity -->
+    <string name="main_sets">Sets</string>
+    <string name="main_cards">Cards</string>
+    <string name="main_settings">Settings</string>
+    <string name="main_details">Details</string>
+
+    <!-- Generic -->
+    <string name="error">Error: %s</string>
+
+    <!-- Notification -->
+    <string name="notification_title">New cards</string>
+    <string name="notification_text">There are new cards on %s</string>
+    <string name="notification_channel_title">MTGSpoilerAlert</string>
+    <string name="notification_channel_description">New sets alerts</string>
+
 </resources>

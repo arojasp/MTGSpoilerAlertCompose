@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
@@ -27,9 +28,11 @@ import es.alejandro.mtgspoileralert.sets.viewmodel.ActionState
 import es.alejandro.mtgspoileralert.sets.viewmodel.SetsViewModel
 import es.alejandro.mtgspoileralert.sets.viewmodel.ViewState
 import es.alejandro.mtgspoileralert.settings.model.Settings
+import es.alejandro.mtgspoileralert.R
 
 @Composable
 fun SetsScreen(
+    paddingValues: PaddingValues,
     viewModel: SetsViewModel = hiltViewModel(),
     onItemClick: (String) -> Unit,
     preferencesAction: (Settings) -> Unit
@@ -52,7 +55,7 @@ fun SetsScreen(
                     )
                 }
             ) {
-                LazyColumn {
+                LazyColumn(modifier = Modifier.padding(paddingValues)) {
                     items(state.data) { item ->
                         SingleSetItem(set = item) {
                             onItemClick(it)
@@ -62,11 +65,12 @@ fun SetsScreen(
             }
         }
         is ViewState.Error -> {
-            Text(text = "Error ${state.errorMessage}")
+            Text(modifier = Modifier.padding(paddingValues),
+                text = stringResource(id = R.string.error, state.errorMessage))
         }
         is ViewState.Loading -> {
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize().padding(paddingValues),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {

@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -24,12 +25,14 @@ import coil.request.ImageRequest
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import es.alejandro.mtgspoileralert.R
 import es.alejandro.mtgspoileralert.cards.model.Card
 import es.alejandro.mtgspoileralert.cards.viewmodel.CardsViewModel
 import es.alejandro.mtgspoileralert.cards.viewmodel.ViewState
 
 @Composable
 fun CardsScreen(
+    paddingValues: PaddingValues,
     viewModel: CardsViewModel = hiltViewModel(),
     set: String?,
     onCardClick: (String) -> Unit
@@ -58,17 +61,18 @@ fun CardsScreen(
                         backgroundColor = MaterialTheme.colors.primary
                     )
                 }) {
-                CardsList(state.data) { cardId ->
+                CardsList(paddingValues, state.data) { cardId ->
                     onCardClick(cardId)
                 }
             }
         }
         is ViewState.Error -> {
-            Text(text = "Error ${state.errorMessage}")
+            Text(modifier = Modifier.padding(paddingValues),
+                text = stringResource(id = R.string.error, state.errorMessage))
         }
         is ViewState.Loading -> {
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize().padding(paddingValues),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -79,8 +83,8 @@ fun CardsScreen(
 }
 
 @Composable
-fun CardsList(cards: List<Card>, onCardClick: (String) -> Unit) {
-    LazyVerticalGrid(GridCells.Fixed(2)) {
+fun CardsList(paddingValues: PaddingValues, cards: List<Card>, onCardClick: (String) -> Unit) {
+    LazyVerticalGrid(GridCells.Fixed(2), modifier = Modifier.padding(paddingValues)) {
         items(cards) { item ->
             SingleCardItem(item) { cardId ->
                 onCardClick(cardId)
