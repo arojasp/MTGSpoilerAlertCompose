@@ -6,10 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material.Card
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,7 +55,7 @@ fun CardsScreen(
                     SwipeRefreshIndicator(
                         state = state,
                         refreshTriggerDistance = trigger,
-                        backgroundColor = MaterialTheme.colors.primary
+                        backgroundColor = MaterialTheme.colorScheme.primary
                     )
                 }) {
                 CardsList(paddingValues, state.data) { cardId ->
@@ -72,7 +69,9 @@ fun CardsScreen(
         }
         is ViewState.Loading -> {
             Column(
-                modifier = Modifier.fillMaxSize().padding(paddingValues),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -93,7 +92,7 @@ fun CardsList(paddingValues: PaddingValues, cards: List<Card>, onCardClick: (Str
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun SingleCardItem(
     card: Card,
@@ -115,7 +114,7 @@ fun SingleCardItem(
                 onClick = { onClick(card.id) },
                 onLongClick = { showDialog = true }
             ),
-        elevation = 8.dp
+        elevation = CardDefaults.cardElevation()
     ) {
         AsyncImage(
             modifier = Modifier.fillMaxSize(),

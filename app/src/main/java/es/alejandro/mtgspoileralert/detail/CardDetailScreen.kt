@@ -1,9 +1,9 @@
 package es.alejandro.mtgspoileralert.detail
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -63,22 +63,22 @@ fun CardDetail(paddingValues: PaddingValues, card: CardResponse) {
             ) {
                 Text(
                     text = name,
-                    style = MaterialTheme.typography.body1
+                    style = MaterialTheme.typography.bodyMedium
                 )
                 Text(
                     text = mana_cost ?: "",
-                    style = MaterialTheme.typography.body1
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
             Spacer(modifier = Modifier.size(20.dp))
             Text(
                 text = type_line,
-                style = MaterialTheme.typography.body1
+                style = MaterialTheme.typography.bodyMedium
             )
             Spacer(modifier = Modifier.size(20.dp))
             Text(
                 text = oracle_text ?: "",
-                style = MaterialTheme.typography.body1
+                style = MaterialTheme.typography.bodyMedium
             )
         }
     }

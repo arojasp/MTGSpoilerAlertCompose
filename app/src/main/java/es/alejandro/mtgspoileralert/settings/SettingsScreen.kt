@@ -8,6 +8,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
@@ -104,8 +105,7 @@ fun SettingsSetupScreen(paddingValues: PaddingValues, viewModel: SettingsViewMod
                     viewModel.saveTimeInterval(it.toLong())
                 },
                 valueRange = minRangeValue..maxRangeValue,
-                enabled = enabledElements,
-                steps = 99
+                enabled = enabledElements
             )
             Spacer(modifier = Modifier.size(15.dp))
             Row(
@@ -113,7 +113,7 @@ fun SettingsSetupScreen(paddingValues: PaddingValues, viewModel: SettingsViewMod
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(text = "${minRangeValue.toInt()}")
-                Text(style = MaterialTheme.typography.h1, text = "${periodInterval.toInt()}")
+                Text(style = MaterialTheme.typography.titleMedium, text = "${periodInterval.toInt()}")
                 Text(text = "${maxRangeValue.toInt()}")
             }
 
@@ -197,9 +197,7 @@ fun DropDown(
                     viewModel.saveTimeUnit(timeUnit)
                     expanded = false
                     itemSelected(selectedItem)
-                }) {
-                    Text(text = timeUnit.toString())
-                }
+                }, text = { Text(text = timeUnit.toString()) })
             }
         }
     }
