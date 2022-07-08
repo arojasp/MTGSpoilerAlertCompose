@@ -55,4 +55,10 @@ class SettingsViewModel @Inject constructor(
             dataStoreManager.setTimeUnit(timeUnit)
         }
     }
+
+    fun saveLanguage(languageCode: String){
+        viewModelScope.launch {
+            dataStoreManager.setPreferredCardLanguage(languageCode)
+        }
+    }
 }

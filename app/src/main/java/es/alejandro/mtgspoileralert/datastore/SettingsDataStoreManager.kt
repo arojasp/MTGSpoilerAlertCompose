@@ -8,19 +8,21 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import es.alejandro.mtgspoileralert.settings.model.Settings
+import es.alejandro.mtgspoileralert.util.PreferencesConstant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-private val Context.dataStore by preferencesDataStore("settings")
+private val Context.dataStore by preferencesDataStore(PreferencesConstant.Settings.SETTINGS_KEY)
 
 class SettingsDataStoreManager @Inject constructor(@ApplicationContext appContext: Context) {
 
     companion object {
-        val CORE_LISTEN = booleanPreferencesKey("core_listen")
-        val INTERVAL = longPreferencesKey("interval")
-        val TIME_UNIT = stringPreferencesKey("time_unit")
+        val CORE_LISTEN = booleanPreferencesKey(PreferencesConstant.Settings.CORE_LISTEN_KEY)
+        val INTERVAL = longPreferencesKey(PreferencesConstant.Settings.INTERVAL_KEY)
+        val TIME_UNIT = stringPreferencesKey(PreferencesConstant.Settings.TIME_UNIT_KEY)
+        val CARDS_LANGUAGE = stringPreferencesKey(PreferencesConstant.Settings.CARD_LANGUAGE_KEY)
     }
 
     private val settingsDataStore = appContext.dataStore
@@ -51,13 +53,20 @@ class SettingsDataStoreManager @Inject constructor(@ApplicationContext appContex
         }
     }
 
+    suspend fun setPreferredCardLanguage(languageCode: String) {
+        settingsDataStore.edit { settingsDataStore ->
+            settingsDataStore[CARDS_LANGUAGE] = languageCode
+        }
+    }
+
     val settings: Flow<Settings> = settingsDataStore.data.map { settingsPreferences ->
         Settings(
             coreSetListen = settingsPreferences[CORE_LISTEN] ?: false,
             interval = Pair(
                 settingsPreferences[INTERVAL] ?: 15,
                 TimeUnit.valueOf(settingsPreferences[TIME_UNIT] ?: TimeUnit.MINUTES.toString())
-            )
+            ),
+            language = settingsPreferences[CARDS_LANGUAGE] ?: "en"
         )
     }
 }

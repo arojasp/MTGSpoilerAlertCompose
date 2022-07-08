@@ -7,12 +7,16 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -22,15 +26,18 @@ import androidx.navigation.navDeepLink
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import es.alejandro.mtgspoileralert.backgroundservice.CallWorker
 import es.alejandro.mtgspoileralert.cards.CardsScreen
 import es.alejandro.mtgspoileralert.detail.CardDetailScreen
-import es.alejandro.mtgspoileralert.notification.NotificationService.Companion.CHANNEL_ID
 import es.alejandro.mtgspoileralert.sets.SetsScreen
 import es.alejandro.mtgspoileralert.settings.SettingsScreen
 import es.alejandro.mtgspoileralert.settings.model.Settings
 import es.alejandro.mtgspoileralert.ui.theme.MTGSpoilerAlertTheme
+import es.alejandro.mtgspoileralert.util.NavigationConstant
+import es.alejandro.mtgspoileralert.util.NotificationConstant
+import es.alejandro.mtgspoileralert.util.WorkerConstant
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -47,20 +54,20 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MTGApp(context: Context) {
 
     val navController = rememberNavController()
-    val uri = "https://mtgsac.com"
-    NavHost(navController = navController, startDestination = "sets") {
-        composable("sets") {
+    NavHost(navController = navController, startDestination = NavigationConstant.SETS_DESTINATION) {
+        composable(NavigationConstant.SETS_DESTINATION) {
             Scaffold(
                 topBar = {
-                    TopAppBar(
-                        title = { Text("Sets", style = MaterialTheme.typography.h1) },
+                    SmallTopAppBar(
+                        title = { Text(stringResource(id = R.string.main_sets)) },
                         actions = {
                             IconButton(onClick = {
-                                navController.navigate("settings")
+                                navController.navigate(NavigationConstant.SETTINGS_DESTINATION)
                             }) {
                                 Icon(
                                     imageVector = Icons.Default.Settings,
@@ -70,10 +77,11 @@ fun MTGApp(context: Context) {
                         }
                     )
                 }
-            ) {
+            ) { padding ->
                 SetsScreen(
+                    padding,
                     onItemClick = { set ->
-                        navController.navigate("cards/$set")
+                        navController.navigate("${NavigationConstant.CARDS_DESTINATION}/$set")
                     },
                     preferencesAction = { settings ->
                         setUpWorker(context, settings)
@@ -82,25 +90,25 @@ fun MTGApp(context: Context) {
             }
         }
         composable(
-            "cards/{set}",
+            "${NavigationConstant.CARDS_DESTINATION}/{${NavigationConstant.SETS_ARGUMENT}}",
             arguments = listOf(
-                navArgument("set") {
+                navArgument(NavigationConstant.SETS_ARGUMENT) {
                     type = NavType.StringType
                 }
             ),
             deepLinks = listOf(
                 navDeepLink {
-                    uriPattern = "$uri/set={set}"
+                    uriPattern = "${NavigationConstant.BASE_URI}/set={set}"
                 }
             )
         ) {
             val setString = remember {
-                it.arguments?.getString("set")
+                it.arguments?.getString(NavigationConstant.SETS_ARGUMENT)
             }
             Scaffold(
                 topBar = {
-                    TopAppBar(
-                        title = { Text("Cards", style = MaterialTheme.typography.h1) },
+                    SmallTopAppBar(
+                        title = { Text(stringResource(id = R.string.main_cards), style = MaterialTheme.typography.titleMedium) },
                         navigationIcon = {
                             IconButton(onClick = { navController.popBackStack() }) {
                                 Icon(
@@ -111,23 +119,23 @@ fun MTGApp(context: Context) {
                         }
                     )
                 }
-            ) {
-                CardsScreen(set = setString) { cardId ->
-                    navController.navigate("card/$cardId")
+            ) { padding ->
+                CardsScreen(padding, set = setString) { cardId ->
+                    navController.navigate("${NavigationConstant.CARD_DESTINATION}/$cardId")
                 }
             }
         }
         composable(
-            "card/{id}",
-            arguments = listOf(navArgument("id") { type = NavType.StringType })
+            "${NavigationConstant.CARD_DESTINATION}/{${NavigationConstant.CARD_ARGUMENT}}",
+            arguments = listOf(navArgument(NavigationConstant.CARD_ARGUMENT) { type = NavType.StringType })
         ) {
             val cardIdString = remember {
-                it.arguments?.getString("id")
+                it.arguments?.getString(NavigationConstant.CARD_ARGUMENT)
             }
             Scaffold(
                 topBar = {
-                    TopAppBar(
-                        title = { Text("Details", style = MaterialTheme.typography.h1) },
+                    SmallTopAppBar(
+                        title = { Text(stringResource(id = R.string.main_details), style = MaterialTheme.typography.titleMedium) },
                         navigationIcon = {
                             IconButton(onClick = { navController.popBackStack() }) {
                                 Icon(
@@ -138,15 +146,15 @@ fun MTGApp(context: Context) {
                         }
                     )
                 }
-            ) {
-                CardDetailScreen(cardId = cardIdString)
+            ) { padding ->
+                CardDetailScreen(padding, cardId = cardIdString)
             }
         }
-        composable("settings") {
+        composable(NavigationConstant.SETTINGS_DESTINATION) {
             Scaffold(
                 topBar = {
-                    TopAppBar(
-                        title = { Text("Settings", style = MaterialTheme.typography.h1) },
+                    SmallTopAppBar(
+                        title = { Text(stringResource(id = R.string.main_settings), style = MaterialTheme.typography.titleMedium) },
                         navigationIcon = {
                             IconButton(onClick = { navController.popBackStack() }) {
                                 Icon(
@@ -157,8 +165,8 @@ fun MTGApp(context: Context) {
                         }
                     )
                 }
-            ) {
-                SettingsScreen {
+            ) { padding ->
+                SettingsScreen(padding) {
                     setUpWorker(context, it)
                 }
             }
@@ -172,11 +180,11 @@ private fun setUpWorker(context: Context, settings: Settings) {
         settings.interval.second
     ).build()
 
-    WorkManager.getInstance(context).cancelUniqueWork("getSets")
+    WorkManager.getInstance(context).cancelUniqueWork(WorkerConstant.UNIQUE_WORK_NAME)
 
     if (settings.coreSetListen) {
         WorkManager.getInstance(context).enqueueUniquePeriodicWork(
-            "getSets",
+            WorkerConstant.UNIQUE_WORK_NAME,
             ExistingPeriodicWorkPolicy.KEEP,
             request
         )
@@ -185,10 +193,10 @@ private fun setUpWorker(context: Context, settings: Settings) {
 
 fun createNotificationChannel(context: Context) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        val name = "MTGSpoilerAlert"
-        val desc = "New sets alerts"
+        val name = context.getString(R.string.notification_channel_title)
+        val desc = context.getString(R.string.notification_channel_description)
         val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+        val channel = NotificationChannel(NotificationConstant.CHANNEL_ID, name, importance).apply {
             description = desc
         }
         val notificationManager =

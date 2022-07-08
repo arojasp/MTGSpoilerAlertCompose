@@ -1,0 +1,1388 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "6b64b20ecc60450f516d991002e63f6a",
+    "entities": [
+      {
+        "tableName": "card_details",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`artist` TEXT, `artist_ids` TEXT NOT NULL, `booster` INTEGER NOT NULL, `border_color` TEXT NOT NULL, `card_back_id` TEXT, `card_faces` TEXT NOT NULL, `cardmarket_id` INTEGER NOT NULL, `cmc` REAL, `collector_number` TEXT NOT NULL, `color_identity` TEXT NOT NULL, `colors` TEXT, `digital` INTEGER NOT NULL, `edhrec_rank` INTEGER NOT NULL, `finishes` TEXT NOT NULL, `foil` INTEGER NOT NULL, `frame` TEXT NOT NULL, `full_art` INTEGER NOT NULL, `games` TEXT NOT NULL, `highres_image` INTEGER NOT NULL, `id` TEXT NOT NULL, `illustration_id` TEXT, `image_status` TEXT NOT NULL, `keywords` TEXT NOT NULL, `lang` TEXT NOT NULL, `layout` TEXT, `mana_cost` TEXT, `multiverse_ids` TEXT NOT NULL, `name` TEXT NOT NULL, `nonfoil` INTEGER NOT NULL, `object` TEXT NOT NULL, `oracle_id` TEXT NOT NULL, `oracle_text` TEXT, `oversized` INTEGER NOT NULL, `penny_rank` INTEGER NOT NULL, `prints_search_uri` TEXT NOT NULL, `promo` INTEGER NOT NULL, `rarity` TEXT NOT NULL, `released_at` TEXT NOT NULL, `reprint` INTEGER NOT NULL, `reserved` INTEGER NOT NULL, `rulings_uri` TEXT NOT NULL, `scryfall_set_uri` TEXT NOT NULL, `scryfall_uri` TEXT NOT NULL, `security_stamp` TEXT, `set` TEXT NOT NULL, `set_id` TEXT NOT NULL, `set_name` TEXT NOT NULL, `set_search_uri` TEXT NOT NULL, `set_type` TEXT NOT NULL, `set_uri` TEXT NOT NULL, `story_spotlight` INTEGER NOT NULL, `tcgplayer_id` INTEGER NOT NULL, `textless` INTEGER NOT NULL, `type_line` TEXT NOT NULL, `uri` TEXT NOT NULL, `variation` INTEGER NOT NULL, `art_crop` TEXT, `border_crop` TEXT, `large` TEXT, `normal` TEXT, `png` TEXT, `small` TEXT, `alchemy` TEXT NOT NULL, `brawl` TEXT NOT NULL, `commander` TEXT NOT NULL, `duel` TEXT NOT NULL, `explorer` TEXT NOT NULL, `future` TEXT NOT NULL, `gladiator` TEXT NOT NULL, `historic` TEXT NOT NULL, `historicbrawl` TEXT NOT NULL, `legacy` TEXT NOT NULL, `modern` TEXT NOT NULL, `oldschool` TEXT NOT NULL, `pauper` TEXT NOT NULL, `paupercommander` TEXT NOT NULL, `penny` TEXT NOT NULL, `pioneer` TEXT NOT NULL, `premodern` TEXT NOT NULL, `standard` TEXT NOT NULL, `vintage` TEXT NOT NULL, `eur` TEXT, `eur_foil` TEXT, `tix` TEXT, `usd` TEXT, `usd_etched` TEXT, `usd_foil` TEXT, `cardhoarder` TEXT NOT NULL, `cardmarket` TEXT NOT NULL, `tcgplayer` TEXT NOT NULL, `edhrec` TEXT, `gatherer` TEXT, `mtgtop8` TEXT, `tcgplayer_infinite_articles` TEXT, `tcgplayer_infinite_decks` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "artist",
+            "columnName": "artist",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "artist_ids",
+            "columnName": "artist_ids",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "booster",
+            "columnName": "booster",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "border_color",
+            "columnName": "border_color",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "card_back_id",
+            "columnName": "card_back_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "card_faces",
+            "columnName": "card_faces",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cardmarket_id",
+            "columnName": "cardmarket_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cmc",
+            "columnName": "cmc",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "collector_number",
+            "columnName": "collector_number",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "color_identity",
+            "columnName": "color_identity",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "colors",
+            "columnName": "colors",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "digital",
+            "columnName": "digital",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "edhrec_rank",
+            "columnName": "edhrec_rank",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "finishes",
+            "columnName": "finishes",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "foil",
+            "columnName": "foil",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "frame",
+            "columnName": "frame",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "full_art",
+            "columnName": "full_art",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "games",
+            "columnName": "games",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "highres_image",
+            "columnName": "highres_image",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "illustration_id",
+            "columnName": "illustration_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "image_status",
+            "columnName": "image_status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "keywords",
+            "columnName": "keywords",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lang",
+            "columnName": "lang",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "layout",
+            "columnName": "layout",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mana_cost",
+            "columnName": "mana_cost",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "multiverse_ids",
+            "columnName": "multiverse_ids",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nonfoil",
+            "columnName": "nonfoil",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "object",
+            "columnName": "object",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "oracle_id",
+            "columnName": "oracle_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "oracle_text",
+            "columnName": "oracle_text",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "oversized",
+            "columnName": "oversized",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "penny_rank",
+            "columnName": "penny_rank",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "prints_search_uri",
+            "columnName": "prints_search_uri",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "promo",
+            "columnName": "promo",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rarity",
+            "columnName": "rarity",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "released_at",
+            "columnName": "released_at",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reprint",
+            "columnName": "reprint",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reserved",
+            "columnName": "reserved",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rulings_uri",
+            "columnName": "rulings_uri",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "scryfall_set_uri",
+            "columnName": "scryfall_set_uri",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "scryfall_uri",
+            "columnName": "scryfall_uri",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "security_stamp",
+            "columnName": "security_stamp",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "set",
+            "columnName": "set",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "set_id",
+            "columnName": "set_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "set_name",
+            "columnName": "set_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "set_search_uri",
+            "columnName": "set_search_uri",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "set_type",
+            "columnName": "set_type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "set_uri",
+            "columnName": "set_uri",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "story_spotlight",
+            "columnName": "story_spotlight",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tcgplayer_id",
+            "columnName": "tcgplayer_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "textless",
+            "columnName": "textless",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type_line",
+            "columnName": "type_line",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "uri",
+            "columnName": "uri",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "variation",
+            "columnName": "variation",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "image_uris.art_crop",
+            "columnName": "art_crop",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "image_uris.border_crop",
+            "columnName": "border_crop",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "image_uris.large",
+            "columnName": "large",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "image_uris.normal",
+            "columnName": "normal",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "image_uris.png",
+            "columnName": "png",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "image_uris.small",
+            "columnName": "small",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "legalities.alchemy",
+            "columnName": "alchemy",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.brawl",
+            "columnName": "brawl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.commander",
+            "columnName": "commander",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.duel",
+            "columnName": "duel",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.explorer",
+            "columnName": "explorer",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.future",
+            "columnName": "future",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.gladiator",
+            "columnName": "gladiator",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.historic",
+            "columnName": "historic",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.historicbrawl",
+            "columnName": "historicbrawl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.legacy",
+            "columnName": "legacy",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.modern",
+            "columnName": "modern",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.oldschool",
+            "columnName": "oldschool",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.pauper",
+            "columnName": "pauper",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.paupercommander",
+            "columnName": "paupercommander",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.penny",
+            "columnName": "penny",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.pioneer",
+            "columnName": "pioneer",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.premodern",
+            "columnName": "premodern",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.standard",
+            "columnName": "standard",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.vintage",
+            "columnName": "vintage",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "prices.eur",
+            "columnName": "eur",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "prices.eur_foil",
+            "columnName": "eur_foil",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "prices.tix",
+            "columnName": "tix",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "prices.usd",
+            "columnName": "usd",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "prices.usd_etched",
+            "columnName": "usd_etched",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "prices.usd_foil",
+            "columnName": "usd_foil",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "purchase_uris.cardhoarder",
+            "columnName": "cardhoarder",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "purchase_uris.cardmarket",
+            "columnName": "cardmarket",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "purchase_uris.tcgplayer",
+            "columnName": "tcgplayer",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "related_uris.edhrec",
+            "columnName": "edhrec",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "related_uris.gatherer",
+            "columnName": "gatherer",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "related_uris.mtgtop8",
+            "columnName": "mtgtop8",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "related_uris.tcgplayer_infinite_articles",
+            "columnName": "tcgplayer_infinite_articles",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "related_uris.tcgplayer_infinite_decks",
+            "columnName": "tcgplayer_infinite_decks",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "sets",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`arena_code` TEXT, `block` TEXT, `block_code` TEXT, `card_count` INTEGER NOT NULL, `code` TEXT NOT NULL, `digital` INTEGER, `foil_only` INTEGER, `icon_svg_uri` TEXT NOT NULL, `id` TEXT NOT NULL, `mtgo_code` TEXT, `name` TEXT NOT NULL, `nonfoil_only` INTEGER, `object` TEXT, `parent_set_code` TEXT, `released_at` TEXT, `scryfall_uri` TEXT, `search_uri` TEXT, `set_type` TEXT, `tcgplayer_id` INTEGER, `uri` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "arena_code",
+            "columnName": "arena_code",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "block",
+            "columnName": "block",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "block_code",
+            "columnName": "block_code",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "card_count",
+            "columnName": "card_count",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "code",
+            "columnName": "code",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "digital",
+            "columnName": "digital",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "foil_only",
+            "columnName": "foil_only",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "icon_svg_uri",
+            "columnName": "icon_svg_uri",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mtgo_code",
+            "columnName": "mtgo_code",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nonfoil_only",
+            "columnName": "nonfoil_only",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "object",
+            "columnName": "object",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "parent_set_code",
+            "columnName": "parent_set_code",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "released_at",
+            "columnName": "released_at",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "scryfall_uri",
+            "columnName": "scryfall_uri",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "search_uri",
+            "columnName": "search_uri",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "set_type",
+            "columnName": "set_type",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "tcgplayer_id",
+            "columnName": "tcgplayer_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "uri",
+            "columnName": "uri",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "cards",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`all_parts` TEXT, `artist` TEXT, `artist_ids` TEXT NOT NULL, `booster` INTEGER NOT NULL, `border_color` TEXT NOT NULL, `card_back_id` TEXT, `cardmarket_id` INTEGER NOT NULL, `cmc` REAL, `collector_number` TEXT NOT NULL, `color_identity` TEXT, `colors` TEXT, `digital` INTEGER NOT NULL, `edhrec_rank` INTEGER NOT NULL, `finishes` TEXT, `flavor_text` TEXT, `foil` INTEGER NOT NULL, `frame` TEXT NOT NULL, `frame_effects` TEXT, `full_art` INTEGER NOT NULL, `games` TEXT, `highres_image` INTEGER NOT NULL, `id` TEXT NOT NULL, `illustration_id` TEXT, `image_status` TEXT NOT NULL, `keywords` TEXT, `lang` TEXT NOT NULL, `layout` TEXT, `mana_cost` TEXT, `mtgo_id` INTEGER NOT NULL, `multiverse_ids` TEXT, `name` TEXT NOT NULL, `nonfoil` INTEGER NOT NULL, `object` TEXT NOT NULL, `oracle_id` TEXT NOT NULL, `oracle_text` TEXT, `oversized` INTEGER NOT NULL, `penny_rank` INTEGER NOT NULL, `power` TEXT, `prints_search_uri` TEXT NOT NULL, `produced_mana` TEXT, `promo` INTEGER NOT NULL, `promo_types` TEXT, `rarity` TEXT NOT NULL, `released_at` TEXT NOT NULL, `reprint` INTEGER NOT NULL, `reserved` INTEGER NOT NULL, `rulings_uri` TEXT NOT NULL, `scryfall_set_uri` TEXT NOT NULL, `scryfall_uri` TEXT NOT NULL, `security_stamp` TEXT, `set` TEXT NOT NULL, `set_id` TEXT NOT NULL, `set_name` TEXT NOT NULL, `set_search_uri` TEXT NOT NULL, `set_type` TEXT NOT NULL, `set_uri` TEXT NOT NULL, `story_spotlight` INTEGER NOT NULL, `tcgplayer_etched_id` INTEGER NOT NULL, `tcgplayer_id` INTEGER NOT NULL, `textless` INTEGER NOT NULL, `toughness` TEXT, `type_line` TEXT NOT NULL, `uri` TEXT NOT NULL, `variation` INTEGER NOT NULL, `watermark` TEXT, `art_crop` TEXT, `border_crop` TEXT, `large` TEXT, `normal` TEXT, `png` TEXT, `small` TEXT, `alchemy` TEXT NOT NULL, `brawl` TEXT NOT NULL, `commander` TEXT NOT NULL, `duel` TEXT NOT NULL, `explorer` TEXT NOT NULL, `future` TEXT NOT NULL, `gladiator` TEXT NOT NULL, `historic` TEXT NOT NULL, `historicbrawl` TEXT NOT NULL, `legacy` TEXT NOT NULL, `modern` TEXT NOT NULL, `oldschool` TEXT NOT NULL, `pauper` TEXT NOT NULL, `paupercommander` TEXT NOT NULL, `penny` TEXT NOT NULL, `pioneer` TEXT NOT NULL, `premodern` TEXT NOT NULL, `standard` TEXT NOT NULL, `vintage` TEXT NOT NULL, `previewed_at` TEXT, `source` TEXT, `source_uri` TEXT, `eur` TEXT, `eur_foil` TEXT, `tix` TEXT, `usd` TEXT, `usd_etched` TEXT, `usd_foil` TEXT, `cardhoarder` TEXT NOT NULL, `cardmarket` TEXT NOT NULL, `tcgplayer` TEXT NOT NULL, `edhrec` TEXT, `gatherer` TEXT, `mtgtop8` TEXT, `tcgplayer_infinite_articles` TEXT, `tcgplayer_infinite_decks` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "all_parts",
+            "columnName": "all_parts",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "artist",
+            "columnName": "artist",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "artist_ids",
+            "columnName": "artist_ids",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "booster",
+            "columnName": "booster",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "border_color",
+            "columnName": "border_color",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "card_back_id",
+            "columnName": "card_back_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "cardmarket_id",
+            "columnName": "cardmarket_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cmc",
+            "columnName": "cmc",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "collector_number",
+            "columnName": "collector_number",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "color_identity",
+            "columnName": "color_identity",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "colors",
+            "columnName": "colors",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "digital",
+            "columnName": "digital",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "edhrec_rank",
+            "columnName": "edhrec_rank",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "finishes",
+            "columnName": "finishes",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "flavor_text",
+            "columnName": "flavor_text",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "foil",
+            "columnName": "foil",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "frame",
+            "columnName": "frame",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "frame_effects",
+            "columnName": "frame_effects",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "full_art",
+            "columnName": "full_art",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "games",
+            "columnName": "games",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "highres_image",
+            "columnName": "highres_image",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "illustration_id",
+            "columnName": "illustration_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "image_status",
+            "columnName": "image_status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "keywords",
+            "columnName": "keywords",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lang",
+            "columnName": "lang",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "layout",
+            "columnName": "layout",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mana_cost",
+            "columnName": "mana_cost",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mtgo_id",
+            "columnName": "mtgo_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "multiverse_ids",
+            "columnName": "multiverse_ids",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nonfoil",
+            "columnName": "nonfoil",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "object",
+            "columnName": "object",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "oracle_id",
+            "columnName": "oracle_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "oracle_text",
+            "columnName": "oracle_text",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "oversized",
+            "columnName": "oversized",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "penny_rank",
+            "columnName": "penny_rank",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "power",
+            "columnName": "power",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "prints_search_uri",
+            "columnName": "prints_search_uri",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "produced_mana",
+            "columnName": "produced_mana",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "promo",
+            "columnName": "promo",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "promo_types",
+            "columnName": "promo_types",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "rarity",
+            "columnName": "rarity",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "released_at",
+            "columnName": "released_at",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reprint",
+            "columnName": "reprint",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reserved",
+            "columnName": "reserved",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rulings_uri",
+            "columnName": "rulings_uri",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "scryfall_set_uri",
+            "columnName": "scryfall_set_uri",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "scryfall_uri",
+            "columnName": "scryfall_uri",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "security_stamp",
+            "columnName": "security_stamp",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "set",
+            "columnName": "set",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "set_id",
+            "columnName": "set_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "set_name",
+            "columnName": "set_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "set_search_uri",
+            "columnName": "set_search_uri",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "set_type",
+            "columnName": "set_type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "set_uri",
+            "columnName": "set_uri",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "story_spotlight",
+            "columnName": "story_spotlight",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tcgplayer_etched_id",
+            "columnName": "tcgplayer_etched_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tcgplayer_id",
+            "columnName": "tcgplayer_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "textless",
+            "columnName": "textless",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "toughness",
+            "columnName": "toughness",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "type_line",
+            "columnName": "type_line",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "uri",
+            "columnName": "uri",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "variation",
+            "columnName": "variation",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "watermark",
+            "columnName": "watermark",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "image_uris.art_crop",
+            "columnName": "art_crop",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "image_uris.border_crop",
+            "columnName": "border_crop",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "image_uris.large",
+            "columnName": "large",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "image_uris.normal",
+            "columnName": "normal",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "image_uris.png",
+            "columnName": "png",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "image_uris.small",
+            "columnName": "small",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "legalities.alchemy",
+            "columnName": "alchemy",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.brawl",
+            "columnName": "brawl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.commander",
+            "columnName": "commander",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.duel",
+            "columnName": "duel",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.explorer",
+            "columnName": "explorer",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.future",
+            "columnName": "future",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.gladiator",
+            "columnName": "gladiator",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.historic",
+            "columnName": "historic",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.historicbrawl",
+            "columnName": "historicbrawl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.legacy",
+            "columnName": "legacy",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.modern",
+            "columnName": "modern",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.oldschool",
+            "columnName": "oldschool",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.pauper",
+            "columnName": "pauper",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.paupercommander",
+            "columnName": "paupercommander",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.penny",
+            "columnName": "penny",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.pioneer",
+            "columnName": "pioneer",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.premodern",
+            "columnName": "premodern",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.standard",
+            "columnName": "standard",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legalities.vintage",
+            "columnName": "vintage",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "preview.previewed_at",
+            "columnName": "previewed_at",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "preview.source",
+            "columnName": "source",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "preview.source_uri",
+            "columnName": "source_uri",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "prices.eur",
+            "columnName": "eur",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "prices.eur_foil",
+            "columnName": "eur_foil",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "prices.tix",
+            "columnName": "tix",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "prices.usd",
+            "columnName": "usd",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "prices.usd_etched",
+            "columnName": "usd_etched",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "prices.usd_foil",
+            "columnName": "usd_foil",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "purchase_uris.cardhoarder",
+            "columnName": "cardhoarder",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "purchase_uris.cardmarket",
+            "columnName": "cardmarket",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "purchase_uris.tcgplayer",
+            "columnName": "tcgplayer",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "related_uris.edhrec",
+            "columnName": "edhrec",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "related_uris.gatherer",
+            "columnName": "gatherer",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "related_uris.mtgtop8",
+            "columnName": "mtgtop8",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "related_uris.tcgplayer_infinite_articles",
+            "columnName": "tcgplayer_infinite_articles",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "related_uris.tcgplayer_infinite_decks",
+            "columnName": "tcgplayer_infinite_decks",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6b64b20ecc60450f516d991002e63f6a')"
+    ]
+  }
+}

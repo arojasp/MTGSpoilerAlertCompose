@@ -1,19 +1,20 @@
 package es.alejandro.mtgspoileralert.sets
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Card
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
@@ -27,9 +28,11 @@ import es.alejandro.mtgspoileralert.sets.viewmodel.ActionState
 import es.alejandro.mtgspoileralert.sets.viewmodel.SetsViewModel
 import es.alejandro.mtgspoileralert.sets.viewmodel.ViewState
 import es.alejandro.mtgspoileralert.settings.model.Settings
+import es.alejandro.mtgspoileralert.R
 
 @Composable
 fun SetsScreen(
+    paddingValues: PaddingValues,
     viewModel: SetsViewModel = hiltViewModel(),
     onItemClick: (String) -> Unit,
     preferencesAction: (Settings) -> Unit
@@ -48,11 +51,11 @@ fun SetsScreen(
                     SwipeRefreshIndicator(
                         state = state,
                         refreshTriggerDistance = trigger,
-                        backgroundColor = MaterialTheme.colors.primary
+                        backgroundColor = MaterialTheme.colorScheme.primary
                     )
                 }
             ) {
-                LazyColumn {
+                LazyColumn(modifier = Modifier.padding(paddingValues)) {
                     items(state.data) { item ->
                         SingleSetItem(set = item) {
                             onItemClick(it)
@@ -62,11 +65,14 @@ fun SetsScreen(
             }
         }
         is ViewState.Error -> {
-            Text(text = "Error ${state.errorMessage}")
+            Text(modifier = Modifier.padding(paddingValues),
+                text = stringResource(id = R.string.error, state.errorMessage))
         }
         is ViewState.Loading -> {
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -87,6 +93,7 @@ fun SetsScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SingleSetItem(
     set: Set,
@@ -97,7 +104,8 @@ fun SingleSetItem(
             .padding(8.dp)
             .fillMaxWidth()
             .clickable { onClick(set.code) },
-        elevation = 8.dp
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)
     ) {
         Row(modifier = Modifier.padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
             AsyncImage(
@@ -108,18 +116,21 @@ fun SingleSetItem(
                     .data(set.icon_svg_uri)
                     .decoderFactory(SvgDecoder.Factory())
                     .build(),
-                contentDescription = null
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(
+                    MaterialTheme.colorScheme.onBackground
+                )
             )
             Column {
                 Text(
                     text = set.name,
-                    style = MaterialTheme.typography.h6,
-                    color = MaterialTheme.colors.primary
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.primary
                 )
                 Text(
                     text = set.code.uppercase(),
-                    style = MaterialTheme.typography.body1,
-                    color = MaterialTheme.colors.secondary
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.secondary
                 )
             }
         }

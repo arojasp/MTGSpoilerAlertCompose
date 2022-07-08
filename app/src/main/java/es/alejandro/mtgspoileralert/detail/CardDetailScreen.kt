@@ -1,23 +1,26 @@
 package es.alejandro.mtgspoileralert.detail
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import es.alejandro.mtgspoileralert.detail.model.CardResponse
 import es.alejandro.mtgspoileralert.detail.viewmodel.CardDetailViewModel
 import es.alejandro.mtgspoileralert.detail.viewmodel.ViewState
+import es.alejandro.mtgspoileralert.R
 
 @Composable
 fun CardDetailScreen(
+    paddingValues: PaddingValues,
     viewModel: CardDetailViewModel = hiltViewModel(),
     cardId: String?
 ) {
@@ -32,14 +35,14 @@ fun CardDetailScreen(
 
     when (val state = viewState) {
         is ViewState.Success -> {
-            CardDetail(card = state.data)
+            CardDetail(paddingValues, card = state.data)
         }
         is ViewState.Error -> {
-            Text(text = "Error ${state.errorMessage}")
+            Text(modifier = Modifier.padding(paddingValues), text = stringResource(id = R.string.error, state.errorMessage))
         }
         is ViewState.Loading -> {
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize().padding(paddingValues),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -50,9 +53,9 @@ fun CardDetailScreen(
 }
 
 @Composable
-fun CardDetail(card: CardResponse) {
+fun CardDetail(paddingValues: PaddingValues, card: CardResponse) {
     with(card) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(paddingValues).padding(16.dp)) {
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -60,22 +63,22 @@ fun CardDetail(card: CardResponse) {
             ) {
                 Text(
                     text = name,
-                    style = MaterialTheme.typography.body1
+                    style = MaterialTheme.typography.bodyMedium
                 )
                 Text(
                     text = mana_cost ?: "",
-                    style = MaterialTheme.typography.body1
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
             Spacer(modifier = Modifier.size(20.dp))
             Text(
                 text = type_line,
-                style = MaterialTheme.typography.body1
+                style = MaterialTheme.typography.bodyMedium
             )
             Spacer(modifier = Modifier.size(20.dp))
             Text(
                 text = oracle_text ?: "",
-                style = MaterialTheme.typography.body1
+                style = MaterialTheme.typography.bodyMedium
             )
         }
     }
