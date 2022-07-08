@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MTG Spoiler Alert</string>
+    <string name="settings_checkbox_title">Comprobar periodicamente si hay cartas nuevas</string>
+    <string name="settings_interval_title">Unidad de intervalo</string>
+    <string name="settings_card_language_title">Idioma preferido de las cartas</string>
+    <string name="settings_version">Versión %s</string>
+    <string name="main_sets">Sets</string>
+    <string name="main_cards">Cartas</string>
+    <string name="main_settings">Configuración</string>
+    <string name="main_details">Detalles</string>
+    <string name="error">Error: %s</string>
+    <string name="notification_title">Cartas nuevas</string>
+    <string name="notification_text">Hay cartas nuevas en %s</string>
+    <string name="notification_channel_title">MTG Spoiler Alert</string>
+    <string name="notification_channel_description">Alertas de nuevas cartas</string>
+</resources>

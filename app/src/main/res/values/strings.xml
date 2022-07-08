@@ -19,7 +19,7 @@
     <!-- Notification -->
     <string name="notification_title">New cards</string>
     <string name="notification_text">There are new cards on %s</string>
-    <string name="notification_channel_title">MTGSpoilerAlert</string>
-    <string name="notification_channel_description">New sets alerts</string>
+    <string name="notification_channel_title">MTG Spoiler Alert</string>
+    <string name="notification_channel_description">New cards alerts</string>
 
 </resources>
