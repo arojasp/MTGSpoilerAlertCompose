@@ -7,12 +7,15 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -23,6 +26,7 @@ import androidx.navigation.navDeepLink
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import es.alejandro.mtgspoileralert.backgroundservice.CallWorker
 import es.alejandro.mtgspoileralert.cards.CardsScreen
@@ -50,16 +54,19 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MTGApp(context: Context) {
+
+
 
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = NavigationConstant.SETS_DESTINATION) {
         composable(NavigationConstant.SETS_DESTINATION) {
             Scaffold(
                 topBar = {
-                    TopAppBar(
-                        title = { Text(stringResource(id = R.string.main_sets), style = MaterialTheme.typography.h1) },
+                    SmallTopAppBar(
+                        title = { Text(stringResource(id = R.string.main_sets)) },
                         actions = {
                             IconButton(onClick = {
                                 navController.navigate(NavigationConstant.SETTINGS_DESTINATION)
@@ -102,8 +109,8 @@ fun MTGApp(context: Context) {
             }
             Scaffold(
                 topBar = {
-                    TopAppBar(
-                        title = { Text(stringResource(id = R.string.main_cards), style = MaterialTheme.typography.h1) },
+                    SmallTopAppBar(
+                        title = { Text(stringResource(id = R.string.main_cards), style = MaterialTheme.typography.titleMedium) },
                         navigationIcon = {
                             IconButton(onClick = { navController.popBackStack() }) {
                                 Icon(
@@ -129,8 +136,8 @@ fun MTGApp(context: Context) {
             }
             Scaffold(
                 topBar = {
-                    TopAppBar(
-                        title = { Text(stringResource(id = R.string.main_details), style = MaterialTheme.typography.h1) },
+                    SmallTopAppBar(
+                        title = { Text(stringResource(id = R.string.main_details), style = MaterialTheme.typography.titleMedium) },
                         navigationIcon = {
                             IconButton(onClick = { navController.popBackStack() }) {
                                 Icon(
@@ -148,8 +155,8 @@ fun MTGApp(context: Context) {
         composable(NavigationConstant.SETTINGS_DESTINATION) {
             Scaffold(
                 topBar = {
-                    TopAppBar(
-                        title = { Text(stringResource(id = R.string.main_settings), style = MaterialTheme.typography.h1) },
+                    SmallTopAppBar(
+                        title = { Text(stringResource(id = R.string.main_settings), style = MaterialTheme.typography.titleMedium) },
                         navigationIcon = {
                             IconButton(onClick = { navController.popBackStack() }) {
                                 Icon(
