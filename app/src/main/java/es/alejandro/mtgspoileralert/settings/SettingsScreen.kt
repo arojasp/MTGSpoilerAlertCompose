@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -23,6 +24,7 @@ import es.alejandro.mtgspoileralert.R
 import es.alejandro.mtgspoileralert.settings.model.Settings
 import es.alejandro.mtgspoileralert.settings.viewmodel.SettingsViewModel
 import es.alejandro.mtgspoileralert.settings.viewmodel.ViewState
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 @Composable
@@ -59,21 +61,22 @@ fun SettingsSetupScreen(paddingValues: PaddingValues, viewModel: SettingsViewMod
         )
     }
 
-    Column(modifier = Modifier.fillMaxHeight().padding(paddingValues), verticalArrangement = Arrangement.SpaceBetween) {
+    Column(modifier = Modifier
+        .fillMaxHeight()
+        .padding(paddingValues), verticalArrangement = Arrangement.SpaceBetween) {
         Column(modifier = Modifier
             .padding(16.dp)) {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text(text = stringResource(id = R.string.settings_checkbox_title))
-                Switch(
-                    checked = coreCheckedState,
-                    onCheckedChange = {
-                        coreCheckedState = it
-                        enabledElements =
-                            coreCheckedState
 
-                        viewModel.saveCoreListen(it)
-                    }
-                )
+            LanguageDropDown(viewModel, settings)
+
+            Spacer(modifier = Modifier.size(30.dp))
+
+            ListenToNewCardsSection(coreCheckedState) {
+                coreCheckedState = it
+                enabledElements =
+                    coreCheckedState
+
+                viewModel.saveCoreListen(it)
             }
 
             Spacer(modifier = Modifier.size(30.dp))
@@ -89,7 +92,7 @@ fun SettingsSetupScreen(paddingValues: PaddingValues, viewModel: SettingsViewMod
                 mutableStateOf(settings.interval.first.toFloat())
             }
 
-            DropDown(enabledElements, viewModel, settings) { timeUnitSelected ->
+            IntervalUnitDropDown(enabledElements, viewModel, settings) { timeUnitSelected ->
                 if (timeUnitSelected == TimeUnit.MINUTES) {
                     minRangeValue = 15f
                     if (periodInterval < 15) periodInterval = 15f
@@ -98,25 +101,11 @@ fun SettingsSetupScreen(paddingValues: PaddingValues, viewModel: SettingsViewMod
             }
 
             val maxRangeValue = 60f
-            Slider(
-                value = periodInterval,
-                onValueChange = {
-                    periodInterval = it
-                    viewModel.saveTimeInterval(it.toLong())
-                },
-                valueRange = minRangeValue..maxRangeValue,
-                enabled = enabledElements
-            )
-            Spacer(modifier = Modifier.size(15.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(text = "${minRangeValue.toInt()}")
-                Text(style = MaterialTheme.typography.titleMedium, text = "${periodInterval.toInt()}")
-                Text(text = "${maxRangeValue.toInt()}")
-            }
 
+            SliderSection(periodInterval, minRangeValue, maxRangeValue, enabledElements) {
+                periodInterval = it
+                viewModel.saveTimeInterval(it.toLong())
+            }
         }
 
         Row(modifier = Modifier
@@ -130,12 +119,116 @@ fun SettingsSetupScreen(paddingValues: PaddingValues, viewModel: SettingsViewMod
 }
 
 @Composable
-fun DropDown(
+fun ListenToNewCardsSection(coreCheckedState: Boolean, onCheckedAction: (checked: Boolean) -> Unit) {
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+        Text(text = stringResource(id = R.string.settings_checkbox_title))
+        Switch(
+            checked = coreCheckedState,
+            onCheckedChange = {
+                onCheckedAction(it)
+            }
+        )
+    }
+}
+
+@Composable
+fun SliderSection(periodInterval: Float, minRangeValue: Float, maxRangeValue:Float, enabled: Boolean, onValueChange: (value: Float) -> Unit) {
+    Slider(
+        value = periodInterval,
+        onValueChange = {
+            onValueChange(it)
+        },
+        valueRange = minRangeValue..maxRangeValue,
+        enabled = enabled
+    )
+    Spacer(modifier = Modifier.size(15.dp))
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(text = "${minRangeValue.toInt()}")
+        Text(style = MaterialTheme.typography.titleMedium, text = "${periodInterval.toInt()}")
+        Text(text = "${maxRangeValue.toInt()}")
+    }
+}
+
+@Composable
+fun LanguageDropDown(
+    viewModel: SettingsViewModel,
+    settings: Settings) {
+
+    var expanded by remember {
+        mutableStateOf(false)
+    }
+    val list = settings.languagesAvailable
+
+    var selectedItem by remember {
+        mutableStateOf(Locale.forLanguageTag(settings.language).displayName)
+    }
+
+    var textFiledSize by remember {
+        mutableStateOf(Size.Zero)
+    }
+
+    val icon = if (expanded) {
+        Icons.Filled.KeyboardArrowUp
+    } else {
+        Icons.Filled.KeyboardArrowDown
+    }
+
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed: Boolean by interactionSource.collectIsPressedAsState()
+
+    if (isPressed) {
+        expanded = !expanded
+    }
+
+    Column {
+        OutlinedTextField(
+            value = selectedItem,
+            onValueChange = {
+                selectedItem = it
+                viewModel.saveLanguage(it)
+            },
+            interactionSource = interactionSource,
+            modifier = Modifier
+                .fillMaxWidth()
+                .onGloballyPositioned { layoutCoordinates ->
+                    textFiledSize = layoutCoordinates.size.toSize()
+                },
+            readOnly = true,
+            label = { Text(text = stringResource(id = R.string.settings_card_language_title)) },
+            trailingIcon = {
+                Icon(
+                    icon,
+                    contentDescription = null,
+                    Modifier.clickable { expanded = !expanded }
+                )
+            }
+        )
+
+        DropdownMenu(
+            expanded = expanded, onDismissRequest = { expanded = false },
+            modifier = Modifier.width(with(LocalDensity.current) { textFiledSize.width.toDp() })
+        ) {
+            list.forEach { language ->
+                DropdownMenuItem(onClick = {
+                    selectedItem = Locale.forLanguageTag(language).displayName
+                    viewModel.saveLanguage(language)
+                    expanded = false
+                }, text = { Text(text = Locale.forLanguageTag(language).displayName) })
+            }
+        }
+    }
+}
+
+@Composable
+fun IntervalUnitDropDown(
     enabled: Boolean,
     viewModel: SettingsViewModel,
     settings: Settings,
-    itemSelected: (timeUnitSelected: TimeUnit) -> Unit
-) {
+    itemSelected: (timeUnitSelected: TimeUnit) -> Unit) {
+
     var expanded by remember {
         mutableStateOf(false)
     }

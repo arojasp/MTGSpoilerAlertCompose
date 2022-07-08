@@ -4,6 +4,7 @@
     <!-- Settings -->
     <string name="settings_checkbox_title">Listen to new cards</string>
     <string name="settings_interval_title">Interval unit</string>
+    <string name="settings_card_language_title">Preferred cards language</string>
     <string name="settings_version">Version %s</string>
 
     <!-- Main Activity -->

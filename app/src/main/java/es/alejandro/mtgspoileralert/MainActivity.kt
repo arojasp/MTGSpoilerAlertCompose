@@ -58,8 +58,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MTGApp(context: Context) {
 
-
-
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = NavigationConstant.SETS_DESTINATION) {
         composable(NavigationConstant.SETS_DESTINATION) {
