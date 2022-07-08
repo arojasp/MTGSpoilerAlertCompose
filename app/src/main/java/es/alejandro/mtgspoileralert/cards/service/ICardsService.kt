@@ -12,6 +12,7 @@ interface ICardsService {
         @Query("unique") unique: String = "prints",
         @Query("order") order: String = "spoiled",
         @Query("include_extras") include_extras: Boolean = false,
+        @Query("include_multilingual") lang: Boolean = true,
         @Query("page") page: Int
     ): CardsResponse
 }

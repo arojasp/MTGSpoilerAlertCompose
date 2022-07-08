@@ -22,6 +22,7 @@ class SettingsDataStoreManager @Inject constructor(@ApplicationContext appContex
         val CORE_LISTEN = booleanPreferencesKey(PreferencesConstant.Settings.CORE_LISTEN_KEY)
         val INTERVAL = longPreferencesKey(PreferencesConstant.Settings.INTERVAL_KEY)
         val TIME_UNIT = stringPreferencesKey(PreferencesConstant.Settings.TIME_UNIT_KEY)
+        val CARDS_LANGUAGE = stringPreferencesKey(PreferencesConstant.Settings.CARD_LANGUAGE_KEY)
     }
 
     private val settingsDataStore = appContext.dataStore
@@ -52,13 +53,20 @@ class SettingsDataStoreManager @Inject constructor(@ApplicationContext appContex
         }
     }
 
+    suspend fun setPreferredCardLanguage(languageCode: String) {
+        settingsDataStore.edit { settingsDataStore ->
+            settingsDataStore[CARDS_LANGUAGE] = languageCode
+        }
+    }
+
     val settings: Flow<Settings> = settingsDataStore.data.map { settingsPreferences ->
         Settings(
             coreSetListen = settingsPreferences[CORE_LISTEN] ?: false,
             interval = Pair(
                 settingsPreferences[INTERVAL] ?: 15,
                 TimeUnit.valueOf(settingsPreferences[TIME_UNIT] ?: TimeUnit.MINUTES.toString())
-            )
+            ),
+            language = settingsPreferences[CARDS_LANGUAGE] ?: "en"
         )
     }
 }

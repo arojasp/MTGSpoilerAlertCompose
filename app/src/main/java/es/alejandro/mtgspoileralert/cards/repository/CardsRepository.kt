@@ -5,6 +5,7 @@ import es.alejandro.mtgspoileralert.cards.model.Card
 import es.alejandro.mtgspoileralert.cards.model.CardsResponse
 import es.alejandro.mtgspoileralert.cards.service.ICardsService
 import es.alejandro.mtgspoileralert.datastore.SetsDataStoreManager
+import es.alejandro.mtgspoileralert.datastore.SettingsDataStoreManager
 import es.alejandro.mtgspoileralert.db.MTGSpoilerAlertDao
 import es.alejandro.mtgspoileralert.notification.NotificationService
 import kotlinx.coroutines.flow.first
@@ -18,7 +19,8 @@ class CardsRepository @Inject constructor(
     val service: ICardsService,
     val dao: MTGSpoilerAlertDao,
     val notificationService: NotificationService,
-    val setsDataStoreManager: SetsDataStoreManager
+    val setsDataStoreManager: SetsDataStoreManager,
+    val settingsDataStoreManager: SettingsDataStoreManager
 ) : ICardsRepository {
     override suspend fun getCardsForSet(set: String): CardsResponse {
         var pageNumber = 1
@@ -33,7 +35,16 @@ class CardsRepository @Inject constructor(
                 hold = service.getCardsForSet(code = searchCodeSet, page = pageNumber)
                 holdCardList.addAll(hold.data)
             }
-            val properResponse = hold.copy(data = holdCardList)
+
+            val languageSelected = settingsDataStoreManager.settings.first().language
+
+            val properResponse = hold.copy(data = holdCardList
+                .groupBy { it.oracle_id }
+                .flatMap { entryMap ->
+                    if(entryMap.value.any { it.lang == languageSelected })
+                        entryMap.value.filter { it.lang == languageSelected}
+                    else
+                        entryMap.value.filter { it.lang == "en"} })
 
             val thereAreNewItems = dao.insertNewCards(set, properResponse.data)
             if (thereAreNewItems && set == setsDataStoreManager.sets.first()) {

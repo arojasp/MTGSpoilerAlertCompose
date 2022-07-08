@@ -1,5 +1,6 @@
 package es.alejandro.mtgspoileralert.db
 
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -9,8 +10,11 @@ import es.alejandro.mtgspoileralert.sets.model.Set
 
 @Database(
     entities = [CardResponse::class, Set::class, Card::class],
-    version = 1,
-    exportSchema = false
+    exportSchema = true,
+    version = 2,
+    autoMigrations = [
+        AutoMigration (from = 1, to = 2)
+    ]
 )
 @TypeConverters(Converters::class)
 abstract class MTGSpoilerAlertDatabase : RoomDatabase() {
