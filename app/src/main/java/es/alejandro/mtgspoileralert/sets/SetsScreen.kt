@@ -1,10 +1,12 @@
 package es.alejandro.mtgspoileralert.sets
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,6 +31,7 @@ import es.alejandro.mtgspoileralert.sets.viewmodel.SetsViewModel
 import es.alejandro.mtgspoileralert.sets.viewmodel.ViewState
 import es.alejandro.mtgspoileralert.settings.model.Settings
 import es.alejandro.mtgspoileralert.R
+import es.alejandro.mtgspoileralert.util.extensions.badgeLayout
 
 @Composable
 fun SetsScreen(
@@ -127,10 +130,15 @@ fun SingleSetItem(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary
                 )
+                Spacer(modifier = Modifier.size(4.dp))
                 Text(
                     text = set.code.uppercase(),
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.secondary
+                    color = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier
+                        .background(MaterialTheme.colorScheme.background, shape = CircleShape)
+                        .badgeLayout()
+                        .padding(4.dp)
                 )
             }
         }
