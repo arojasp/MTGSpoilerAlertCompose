@@ -18,7 +18,6 @@ import javax.inject.Inject
 sealed class ViewState {
     object Loading : ViewState()
     data class Success(val data: List<Set>) : ViewState()
-    data class PreferencesSuccess(val data: Settings) : ViewState()
     data class Error(val errorMessage: String) : ViewState()
 }
 
@@ -30,8 +29,8 @@ sealed class ActionState {
 @HiltViewModel
 class SetsViewModel @Inject constructor(
     val useCase: IGetSetUseCase,
-    val dataStoreManager: SettingsDataStoreManager,
-    val setsStoreManager: SetsDataStoreManager
+    private val settingsStoreManager: SettingsDataStoreManager,
+    private val setsStoreManager: SetsDataStoreManager
 ) : ViewModel() {
 
     fun refresh() {
@@ -62,10 +61,9 @@ class SetsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            dataStoreManager.settings.collect {
+            settingsStoreManager.settings.collect {
                 _actionState.value = ActionState.PreferencesAction(it)
             }
         }
-        refresh()
     }
 }

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import es.alejandro.mtgspoileralert.datastore.SettingsDataStoreManager
+import es.alejandro.mtgspoileralert.sets.model.SetType
 import es.alejandro.mtgspoileralert.settings.model.Settings
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
@@ -34,6 +35,14 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             dataStoreManager.settings.collect {
                 _viewState.value = ViewState.Success(it)
+            }
+        }
+    }
+
+    fun saveSetType(setTypes: List<SetType>) {
+        viewModelScope.launch {
+            dataStoreManager.settings.collect {
+                dataStoreManager.setSetTypes(setTypes)
             }
         }
     }
