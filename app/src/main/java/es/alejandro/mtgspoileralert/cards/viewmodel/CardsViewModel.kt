@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 sealed class ViewState {
     object Loading : ViewState()
-    data class Success(val data: List<Card>) : ViewState()
+    data class Success(val data: List<Pair<String, List<Card>>>) : ViewState()
     data class Error(val errorMessage: String) : ViewState()
 }
 
@@ -34,7 +34,8 @@ class CardsViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val cardsResponse = useCase(setCode)
-                _viewState.value = ViewState.Success(cardsResponse.data)
+                val formattedResponse = cardsResponse.data.groupBy { it.name }.map { Pair(it.key, it.value) }
+                _viewState.value = ViewState.Success(formattedResponse)
             } catch (e: Exception) {
                 Log.d("MTGSA", "Exception ${e.message}")
                 _viewState.value = ViewState.Error(e.message ?: "Unknown error")
