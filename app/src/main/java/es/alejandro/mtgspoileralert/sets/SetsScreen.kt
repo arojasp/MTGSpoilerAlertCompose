@@ -1,12 +1,17 @@
 package es.alejandro.mtgspoileralert.sets
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -29,7 +34,9 @@ import es.alejandro.mtgspoileralert.sets.viewmodel.SetsViewModel
 import es.alejandro.mtgspoileralert.sets.viewmodel.ViewState
 import es.alejandro.mtgspoileralert.settings.model.Settings
 import es.alejandro.mtgspoileralert.R
+import es.alejandro.mtgspoileralert.util.extensions.badgeLayout
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun SetsScreen(
     paddingValues: PaddingValues,
@@ -38,31 +45,39 @@ fun SetsScreen(
     preferencesAction: (Settings) -> Unit
 ) {
 
+    DisposableEffect(key1 = Unit) {
+        viewModel.refresh()
+        onDispose {}
+    }
+
     val viewState by remember { viewModel.viewState }
     val actionState by remember { viewModel.actionState }
     val isRefreshing by remember { viewModel.isRefreshing }
 
     when (val state = viewState) {
         is ViewState.Success -> {
-            SwipeRefresh(
-                state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
-                onRefresh = { viewModel.refresh() },
-                indicator = { state, trigger ->
-                    SwipeRefreshIndicator(
-                        state = state,
-                        refreshTriggerDistance = trigger,
-                        backgroundColor = MaterialTheme.colorScheme.primary
-                    )
-                }
-            ) {
-                LazyColumn(modifier = Modifier.padding(paddingValues)) {
-                    items(state.data) { item ->
-                        SingleSetItem(set = item) {
-                            onItemClick(it)
+            AnimatedContent(targetState = viewState) {
+                SwipeRefresh(
+                    state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
+                    onRefresh = { viewModel.refresh() },
+                    indicator = { state, trigger ->
+                        SwipeRefreshIndicator(
+                            state = state,
+                            refreshTriggerDistance = trigger,
+                            backgroundColor = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                ) {
+                    LazyColumn(modifier = Modifier.padding(paddingValues)) {
+                        items(state.data) { item ->
+                            SingleSetItem(set = item) {
+                                onItemClick(it)
+                            }
                         }
                     }
                 }
             }
+
         }
         is ViewState.Error -> {
             Text(modifier = Modifier.padding(paddingValues),
@@ -127,10 +142,15 @@ fun SingleSetItem(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary
                 )
+                Spacer(modifier = Modifier.size(4.dp))
                 Text(
                     text = set.code.uppercase(),
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.secondary
+                    color = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier
+                        .background(MaterialTheme.colorScheme.background, shape = CircleShape)
+                        .badgeLayout()
+                        .padding(4.dp)
                 )
             }
         }

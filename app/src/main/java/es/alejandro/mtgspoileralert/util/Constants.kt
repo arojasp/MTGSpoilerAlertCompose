@@ -17,6 +17,7 @@ object PreferencesConstant{
         const val INTERVAL_KEY = "interval"
         const val TIME_UNIT_KEY = "time_unit"
         const val CARD_LANGUAGE_KEY = "card_language"
+        const val SET_TYPE_KEY = "set_type"
     }
 }
 object NavigationConstant {

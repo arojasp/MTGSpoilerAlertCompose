@@ -1,12 +1,10 @@
 package es.alejandro.mtgspoileralert.datastore
 
 import android.content.Context
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.longPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
+import es.alejandro.mtgspoileralert.sets.model.SetType
 import es.alejandro.mtgspoileralert.settings.model.Settings
 import es.alejandro.mtgspoileralert.util.PreferencesConstant
 import kotlinx.coroutines.flow.Flow
@@ -23,6 +21,7 @@ class SettingsDataStoreManager @Inject constructor(@ApplicationContext appContex
         val INTERVAL = longPreferencesKey(PreferencesConstant.Settings.INTERVAL_KEY)
         val TIME_UNIT = stringPreferencesKey(PreferencesConstant.Settings.TIME_UNIT_KEY)
         val CARDS_LANGUAGE = stringPreferencesKey(PreferencesConstant.Settings.CARD_LANGUAGE_KEY)
+        val SET_TYPE = stringSetPreferencesKey(PreferencesConstant.Settings.SET_TYPE_KEY)
     }
 
     private val settingsDataStore = appContext.dataStore
@@ -32,6 +31,12 @@ class SettingsDataStoreManager @Inject constructor(@ApplicationContext appContex
             settingsPreferences[CORE_LISTEN] = settings.coreSetListen
             settingsPreferences[INTERVAL] = settings.interval.first
             settingsPreferences[TIME_UNIT] = settings.interval.second.toString()
+        }
+    }
+
+    suspend fun setSetTypes(types: List<SetType>) {
+        settingsDataStore.edit { settingsDataStore ->
+            settingsDataStore[SET_TYPE] = types.map { it.name }.toSet()
         }
     }
 
@@ -66,7 +71,8 @@ class SettingsDataStoreManager @Inject constructor(@ApplicationContext appContex
                 settingsPreferences[INTERVAL] ?: 15,
                 TimeUnit.valueOf(settingsPreferences[TIME_UNIT] ?: TimeUnit.MINUTES.toString())
             ),
-            language = settingsPreferences[CARDS_LANGUAGE] ?: "en"
+            language = settingsPreferences[CARDS_LANGUAGE] ?: "en",
+            setTypes = settingsPreferences[SET_TYPE]?.map { SetType.valueOf(it) }?.toMutableList() ?: mutableListOf(SetType.CORE, SetType.COMMANDER, SetType.EXPANSION)
         )
     }
 }
