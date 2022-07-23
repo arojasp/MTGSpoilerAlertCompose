@@ -148,7 +148,7 @@ fun DialogCard(imageUris: List<String?>, onClose: () -> Unit) {
     ) {
         Surface(
             shape = RoundedCornerShape(16.dp),
-            color = Color.White,
+            color = MaterialTheme.colorScheme.background,
             modifier = Modifier.wrapContentHeight()
         ) {
             Column(
@@ -177,6 +177,8 @@ fun DialogCard(imageUris: List<String?>, onClose: () -> Unit) {
 
                 HorizontalPagerIndicator(
                     pagerState = pagerState,
+                    activeColor = MaterialTheme.colorScheme.primary,
+                    inactiveColor = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier
                         .padding(16.dp)
 
