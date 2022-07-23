@@ -41,10 +41,11 @@ class CardsRepository @Inject constructor(
             val properResponse = hold.copy(data = holdCardList
                 .groupBy { it.oracle_id }
                 .flatMap { entryMap ->
-                    if(entryMap.value.any { it.lang == languageSelected })
-                        entryMap.value.filter { it.lang == languageSelected}
-                    else
-                        entryMap.value.filter { it.lang == "en"} })
+                    var filtered = entryMap.value.filter { it.lang == languageSelected }
+                    if (filtered.isEmpty())
+                        filtered = entryMap.value.filter { it.lang == "en" }
+                    filtered
+                })
 
             val thereAreNewItems = dao.insertNewCards(set, properResponse.data)
             if (thereAreNewItems && set == setsDataStoreManager.sets.first()) {
