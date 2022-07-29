@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -26,14 +27,20 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.accompanist.flowlayout.FlowMainAxisAlignment
+import com.google.accompanist.flowlayout.FlowRow
+import com.google.accompanist.flowlayout.MainAxisAlignment
+import com.google.accompanist.flowlayout.SizeMode
 import es.alejandro.mtgspoileralert.BuildConfig
 import es.alejandro.mtgspoileralert.R
 import es.alejandro.mtgspoileralert.settings.model.Settings
@@ -84,67 +91,130 @@ fun SettingsSetupScreen(
 
     Column(
         modifier = Modifier
-            .fillMaxHeight()
+            .fillMaxSize()
             .padding(paddingValues), verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Column(
+
+        LazyColumn(
             modifier = Modifier
-                .padding(16.dp)
+                .fillMaxSize().padding(16.dp, 0.dp)
         ) {
+            item {
+                LanguageDropDown(viewModel, settings)
 
-            LanguageDropDown(viewModel, settings)
-
-            Spacer(modifier = Modifier.size(30.dp))
-
-            SetSelectionSection(viewModel, settings)
-
-            Spacer(modifier = Modifier.size(15.dp))
-
-            ListenToNewCardsSection(coreCheckedState) {
-                coreCheckedState = it
-                enabledElements =
-                    coreCheckedState
-
-                viewModel.saveCoreListen(it)
+                Spacer(modifier = Modifier.size(16.dp))
             }
+            item {
+                val itemSize: Dp = (LocalConfiguration.current.screenWidthDp.dp / 4)
 
-            Spacer(modifier = Modifier.size(30.dp))
+                FlowRow(
+                    mainAxisAlignment = MainAxisAlignment.Center,
+                    mainAxisSize = SizeMode.Expand,
+                    mainAxisSpacing = 24.dp
+                ) {
+                    Settings.Available.SET_TYPES.forEach { item ->
+                        var checked by remember { mutableStateOf(settings.setTypes.contains(item)) }
 
-            var minRangeValue by remember {
-                if (settings.interval.second == TimeUnit.MINUTES)
-                    mutableStateOf(15f)
-                else
-                    mutableStateOf(1f)
+                        IconToggleButton(
+                            checked = checked,
+                            modifier = Modifier.size(itemSize),
+                            onCheckedChange = {
+
+                                if (settings.setTypes.size == 1 && !it) {
+                                    Log.d("TAG", "${settings.setTypes.size}")
+                                } else {
+
+                                    if (it) {
+                                        if (!settings.setTypes.any { it == item })
+                                            settings.setTypes.add(item)
+                                    } else {
+                                        if (settings.setTypes.any { it == item })
+                                            settings.setTypes.remove(item)
+                                    }
+
+                                    checked = it
+                                    viewModel.saveSetType(settings.setTypes)
+                                }
+                            }
+                        ) {
+
+                            val backgroundColor =
+                                if (checked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant
+
+                            val textColor =
+                                if (checked) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
+
+                            AutoSizeText(
+                                text = item.formatString().lowercase()
+                                    .replaceFirstChar { it.uppercaseChar() },
+                                textStyle = MaterialTheme.typography.bodyMedium,
+                                color = textColor,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .background(
+                                        backgroundColor,
+                                        shape = CircleShape
+                                    )
+                                    .badgeLayout()
+                                    .padding(4.dp)
+                                    .fillMaxWidth()
+                            )
+                        }
+                    }
+                }
             }
+            item {
+                Spacer(modifier = Modifier.size(15.dp))
 
-            var periodInterval by remember {
-                mutableStateOf(settings.interval.first.toFloat())
+                ListenToNewCardsSection(coreCheckedState) {
+                    coreCheckedState = it
+                    enabledElements =
+                        coreCheckedState
+
+                    viewModel.saveCoreListen(it)
+                }
+
+                Spacer(modifier = Modifier.size(30.dp))
+
+                var minRangeValue by remember {
+                    if (settings.interval.second == TimeUnit.MINUTES)
+                        mutableStateOf(15f)
+                    else
+                        mutableStateOf(1f)
+                }
+
+                var periodInterval by remember {
+                    mutableStateOf(settings.interval.first.toFloat())
+                }
+
+                IntervalUnitDropDown(enabledElements, viewModel, settings) { timeUnitSelected ->
+                    if (timeUnitSelected == TimeUnit.MINUTES) {
+                        minRangeValue = 15f
+                        if (periodInterval < 15) periodInterval = 15f
+                    } else
+                        minRangeValue = 1f
+                }
+
+                val maxRangeValue = 60f
+
+                SliderSection(periodInterval, minRangeValue, maxRangeValue, enabledElements) {
+                    periodInterval = it
+                    viewModel.saveTimeInterval(it.toLong())
+                }
             }
-
-            IntervalUnitDropDown(enabledElements, viewModel, settings) { timeUnitSelected ->
-                if (timeUnitSelected == TimeUnit.MINUTES) {
-                    minRangeValue = 15f
-                    if (periodInterval < 15) periodInterval = 15f
-                } else
-                    minRangeValue = 1f
-            }
-
-            val maxRangeValue = 60f
-
-            SliderSection(periodInterval, minRangeValue, maxRangeValue, enabledElements) {
-                periodInterval = it
-                viewModel.saveTimeInterval(it.toLong())
+            item {
+                Spacer(modifier = Modifier.size(40.dp))
+                Row(
+                    modifier = Modifier
+                        .weight(1f, false)
+                        .fillMaxWidth()
+                        .padding(0.dp, 0.dp, 0.dp, 16.dp), horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(stringResource(id = R.string.settings_version, BuildConfig.VERSION_NAME))
+                }
             }
         }
 
-        Row(
-            modifier = Modifier
-                .weight(1f, false)
-                .fillMaxWidth()
-                .padding(0.dp, 0.dp, 0.dp, 16.dp), horizontalArrangement = Arrangement.Center
-        ) {
-            Text(stringResource(id = R.string.settings_version, BuildConfig.VERSION_NAME))
-        }
     }
 
 }
@@ -166,69 +236,6 @@ fun ListenToNewCardsSection(
                 onCheckedAction(it)
             }
         )
-    }
-}
-
-@Composable
-fun SetSelectionSection(
-    viewModel: SettingsViewModel,
-    settings: Settings
-) {
-
-    LazyVerticalGrid(columns = GridCells.Fixed(3), verticalArrangement = Arrangement.Center) {
-        items(Settings.Available.SET_TYPES) { item ->
-
-            var checked by remember { mutableStateOf(settings.setTypes.contains(item)) }
-
-            IconToggleButton(
-                checked = checked,
-                onCheckedChange = {
-
-                    if (settings.setTypes.size == 1 && !it) {
-                        Log.d("TAG","${settings.setTypes.size}")
-                    } else {
-
-                        if (it){
-                            if (!settings.setTypes.any { it == item })
-                                settings.setTypes.add(item)
-                        } else {
-                            if (settings.setTypes.any { it == item })
-                                settings.setTypes.remove(item)
-                        }
-
-                        checked = it
-                        viewModel.saveSetType(settings.setTypes)
-                    }
-                },
-                modifier = Modifier
-                    .padding(8.dp, 4.dp)
-            ) {
-
-                val backgroundColor =
-                    if (checked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant
-
-                val textColor =
-                    if (checked) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
-
-                AutoSizeText(
-                    text = item.formatString().lowercase()
-                        .replaceFirstChar { it.uppercaseChar() },
-                    textStyle = MaterialTheme.typography.bodyMedium,
-                    color = textColor,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .background(
-                            backgroundColor,
-                            shape = CircleShape
-                        )
-                        .badgeLayout()
-                        .padding(4.dp)
-                        .fillMaxWidth()
-                )
-            }
-
-
-        }
     }
 }
 
